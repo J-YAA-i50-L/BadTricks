@@ -1,1 +1,1 @@
-print('LNR')
+print('YAA')
