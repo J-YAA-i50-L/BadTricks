@@ -1,14 +1,14 @@
 import os
 import sys
 import pygame
-from tkinter import *
+from screeninfo import get_monitors
 from GeneralFunctions import terminate, load_image
-root = Tk()
 pygame.init()
 pygame.key.set_repeat(200, 70)
 # Разрешение экрана
-WIDTH = root.winfo_screenwidth()
-HEIGHT = root.winfo_screenheight()
+screen_info = str(get_monitors()[0])[8:-1].split(', ')
+WIDTH = int(screen_info[2][6:])
+HEIGHT = int(screen_info[3][7:])
 FPS = 50
 STEP = 10
 signal_start = None
