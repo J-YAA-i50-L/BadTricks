@@ -1,7 +1,5 @@
 from GeneralFunctions import *
 
-signal_start = None
-
 
 class User(pygame.sprite.Sprite):  # Класс User для авторизации и сохранения прогресса
     # Открываем изображение и маштабируем
@@ -18,7 +16,6 @@ class User(pygame.sprite.Sprite):  # Класс User для авторизаци
         self.rect.y = 15 * (HEIGHT / 1020) + 1
 
     def update(self, *args):
-        global signal_start
         if args and self.rect.collidepoint(args[0].pos):
             pygame.draw.rect(self.image, pygame.Color('#3b83bd'),
                              (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)
@@ -34,12 +31,20 @@ class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода
     load_im = load_image("print_area.png", cat='Sprite_meny_play')
     image = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
                                              load_im.get_height() * (HEIGHT / 1381)))
+    imagee = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
+                                             load_im.get_height() * (HEIGHT / 1381)))
 
-    def __init__(self, group, status='log'):
+    def __init__(self, group, status):
         super().__init__(group)
-        self.image = PrintArea.image
-        self.rect = self.image.get_rect()
         self.status = status
+        if self.status == "pas":  # Для пароля
+            self.image = PrintArea.imagee
+            self.rect = self.imagee.get_rect()
+        else:
+            self.image = PrintArea.image
+            self.rect = self.image.get_rect()
+        self.text_input = ''
+        self.flag = False
         # Координаты левого верхнего угла с учетом размера экранна
         if self.status == "log":  # Для логина
             self.rect.x = 955 * (WIDTH / 2779) + 1
@@ -48,6 +53,58 @@ class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода
             self.rect.x = 954 * (WIDTH / 2779) + 1
             self.rect.y = 733 * (HEIGHT / 1381) + 1
 
-    # def update(self, *args):
-    #     if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-    #         terminate()
+    def update(self, *args):
+        if args[0].type == pygame.MOUSEBUTTONDOWN:
+            if args and self.rect.collidepoint(args[0].pos) and args[0].type == pygame.MOUSEBUTTONDOWN and not self.flag:
+                self.flag = True
+            else:
+                self.flag = False
+                signal_input(self.text_input)
+        if args[0].type == pygame.KEYDOWN and self.flag:
+            if len(self.text_input) <= 22:
+                if args[0].key == pygame.K_BACKSPACE and len(self.text_input) > 0:
+                    self.text_input = self.text_input[:-1]
+                else:
+                    self.text_input += args[0].unicode
+            text = (self.text_input, (25, 5))
+            font = pygame.font.SysFont('arial', int(80 * (HEIGHT / 1381)))
+            string_rendered = font.render(text[0], 20, pygame.Color('black'))
+            self.image.blit(string_rendered, text[-1])
+
+
+class ButtonRun(pygame.sprite.Sprite):
+    # Открываем изображение и маштабируем
+    load_im = load_image("button_run.png", cat='Sprite_meny_play')
+    image = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
+                                             load_im.get_height() * (HEIGHT / 1381)))
+    load_im_clik = load_image("button_run_clik.png", cat='Sprite_meny_play')
+    image_clik = pygame.transform.scale(load_im_clik, (load_im.get_width() * (WIDTH / 2779),
+                                             load_im.get_height() * (HEIGHT / 1381)))
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = ButtonRun.image
+        self.rect = self.image.get_rect()
+        # Координаты левого верхнего угла с учетом размера экранна
+        self.rect.x = 1055 * (WIDTH / 2779) + 1
+        self.rect.y = 900 * (HEIGHT / 1381) + 1
+
+    def update(self, *args):
+        if args and self.rect.collidepoint(args[0].pos):
+                self.image = ButtonRun.image_clik
+        else:
+            self.image = ButtonRun.image
+
+
+class Registration(pygame.sprite.Sprite):
+    load_im = load_image("registration.png", cat='Sprite_meny_play')
+    image = pygame.transform.scale(load_im, (load_im.get_width() * 1.5 * (WIDTH / 2779),
+                                             load_im.get_height() * 1.5 * (HEIGHT / 1381)))
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = Registration.image
+        self.rect = self.image.get_rect()
+        # Координаты левого верхнего угла с учетом размера экранна
+        self.rect.x = 2095 * (WIDTH / 2779) + 1
+        self.rect.y = 15 * (HEIGHT / 1381) + 1

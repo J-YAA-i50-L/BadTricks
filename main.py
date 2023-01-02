@@ -33,9 +33,11 @@ def authorization():  # Авторизация
     pygame.display.flip()
     fon = pygame.transform.scale(load_image('authorization.png', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
-    PrintArea(authorization_sprites)
+    PrintArea(authorization_sprites, 'log')
     PrintArea(authorization_sprites, 'pas')
     ExitСross(authorization_sprites, 'back')
+    ButtonRun(authorization_sprites)
+    Registration(authorization_sprites)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -49,6 +51,9 @@ def authorization():  # Авторизация
                     screen.fill(pygame.Color(0, 0, 0))
                     signal_input(None)
                     return start_screen()  # Завершаем работу на авторизации и открываем стартовое окно
+            if event.type == pygame.KEYDOWN:
+                authorization_sprites.update(event)
+
         authorization_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

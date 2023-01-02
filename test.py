@@ -1,1 +1,3 @@
-print('not YAA')
+import pygame
+
+print(pygame.font.get_fonts())
