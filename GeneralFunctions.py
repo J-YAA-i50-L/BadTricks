@@ -1,6 +1,20 @@
 import os
 import sys
 import pygame
+from screeninfo import get_monitors
+pygame.init()
+pygame.key.set_repeat(200, 70)
+# Разрешение экрана
+screen_info = str(get_monitors()[0])[8:-1].split(', ')
+WIDTH = int(screen_info[2][6:])
+HEIGHT = int(screen_info[3][7:])
+FPS = 50
+STEP = 10
+signal_auth = None
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+clock = pygame.time.Clock()
+meny_sprites = pygame.sprite.Group()
+authorization_sprites = pygame.sprite.Group()
 
 
 def load_image(name, color_key=None, cat='data'):
