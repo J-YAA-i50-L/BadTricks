@@ -26,7 +26,7 @@ class User(pygame.sprite.Sprite):  # Класс User для авторизаци
             pygame.draw.rect(self.image, pygame.Color('#7da4c5'),
                              (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-            signal_start = 'auth'
+            signal_input('auth')
 
 
 class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода информации в авторизации

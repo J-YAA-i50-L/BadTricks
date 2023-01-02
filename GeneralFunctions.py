@@ -10,6 +10,7 @@ WIDTH = int(screen_info[2][6:])
 HEIGHT = int(screen_info[3][7:])
 FPS = 50
 STEP = 10
+signal_start = None
 signal_auth = None
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
@@ -33,6 +34,16 @@ def load_image(name, color_key=None, cat='data'):
     else:
         image = image.convert_alpha()
     return image
+
+
+def signal_output():
+    global signal_start
+    return signal_start
+
+
+def signal_input(signal):
+    global signal_start
+    signal_start = signal
 
 
 def terminate():

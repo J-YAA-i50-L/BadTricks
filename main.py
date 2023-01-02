@@ -9,7 +9,7 @@ def start_screen():
     screen.blit(fon, (0, 0))
     Boor(meny_sprites)
     User(meny_sprites)
-    Top(meny_sprites)
+    # Top(meny_sprites)
     ExitСross(meny_sprites)
     while True:
         for event in pygame.event.get():
@@ -19,11 +19,10 @@ def start_screen():
                 if event.key == pygame.K_ESCAPE:
                     terminate()
             if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
-                signal_start = meny_sprites.update(event)
-                print(signal_start)
-                if signal_start == 'auth':
+                meny_sprites.update(event)
+                if signal_output() == 'auth':
                     screen.fill(pygame.Color(0, 0, 0))
-                    signal_start = None
+                    signal_input(None)
                     return authorization()  # Завершаем работу стартового окна и открываем окно авторизации
         meny_sprites.draw(screen)
         pygame.display.flip()
@@ -31,7 +30,6 @@ def start_screen():
 
 
 def authorization():  # Авторизация
-    global signal_auth
     pygame.display.flip()
     fon = pygame.transform.scale(load_image('authorization.png', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -47,9 +45,9 @@ def authorization():  # Авторизация
                     terminate()
             if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
                 authorization_sprites.update(event)
-                if signal_auth == 'back':
+                if signal_output() == 'exit':
                     screen.fill(pygame.Color(0, 0, 0))
-                    signal_auth = None
+                    signal_input(None)
                     return start_screen()  # Завершаем работу на авторизации и открываем стартовое окно
         authorization_sprites.draw(screen)
         pygame.display.flip()
