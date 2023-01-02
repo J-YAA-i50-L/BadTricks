@@ -1,7 +1,5 @@
 from GeneralFunctions import *
 
-signal_start = None
-
 
 class User(pygame.sprite.Sprite):  # Класс User для авторизации и сохранения прогресса
     # Открываем изображение и маштабируем
@@ -18,7 +16,6 @@ class User(pygame.sprite.Sprite):  # Класс User для авторизаци
         self.rect.y = 15 * (HEIGHT / 1020) + 1
 
     def update(self, *args):
-        global signal_start
         if args and self.rect.collidepoint(args[0].pos):
             pygame.draw.rect(self.image, pygame.Color('#3b83bd'),
                              (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)

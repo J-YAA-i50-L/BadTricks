@@ -1,7 +1,5 @@
 from GeneralFunctions import *
 
-signal_exit = None
-
 
 class ExitСross(pygame.sprite.Sprite):  # Класс ExitСross для выхода из игры или возвращение назад
     # Открываем изображение и маштабируем
@@ -19,7 +17,6 @@ class ExitСross(pygame.sprite.Sprite):  # Класс ExitСross для выхо
         self.rect.y = 5 * (HEIGHT / 1020) + 1
 
     def update(self, *args):
-        global signal_exit
         if (args and args[0].type == pygame.MOUSEBUTTONDOWN and
                 self.rect.collidepoint(args[0].pos) and self.status == 'ter'):
             terminate()

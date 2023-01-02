@@ -22,7 +22,5 @@ class Boor(pygame.sprite.Sprite):  # Класс Boor для начала нов�
         else:
             pygame.draw.rect(self.image, pygame.Color('#6f6677'),
                              (0, 0, self.image.get_width(), self.image.get_height()), 5)
-
-
-
-
+        if args and self.rect.collidepoint(args[0].pos) and args[0].type == pygame.MOUSEBUTTONDOWN:
+            signal_input('lvl_choice')
