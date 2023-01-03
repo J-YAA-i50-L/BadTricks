@@ -14,6 +14,7 @@ def start_screen():
     User(meny_sprites)
     Top(meny_sprites)
     ExitСross(meny_sprites)
+    music('menu')
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -42,6 +43,7 @@ def authorization():  # Авторизация
     PrintArea(authorization_sprites)
     PrintArea(authorization_sprites, 'pas')
     ExitСross(authorization_sprites, 'back')
+    music('menu')
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -85,6 +87,7 @@ def level_choice(): # выбор уровня
     Star(level_choice_sprites, 1155, 435, 'lit', 2)
     Star(level_choice_sprites, 1205, 415, 'lit', 3)
     bg = pygame.transform.scale(load_image('level_choise_bg.png', cat='Level_choise'), (WIDTH, HEIGHT))
+    music('menu')
     while True:
         screen.blit(bg, (0, 0))
         for event in pygame.event.get():

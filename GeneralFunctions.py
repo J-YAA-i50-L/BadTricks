@@ -17,6 +17,8 @@ clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
 authorization_sprites = pygame.sprite.Group()
 level_choice_sprites = pygame.sprite.Group()
+button_sound = pygame.mixer.Sound('Music/button.wav')
+menu_music = False
 
 
 def load_image(name, color_key=None, cat='data'):
@@ -50,3 +52,12 @@ def signal_input(signal):
 def terminate():
     pygame.quit()
     sys.exit()
+
+
+def music(type_music):
+    global menu_music
+    if type_music == 'menu':
+        if not menu_music:
+            pygame.mixer.music.load('Music/01Menu.wav')
+            pygame.mixer.music.play(-1)
+            menu_music = True

@@ -18,10 +18,15 @@ class LevelDoor(pygame.sprite.Sprite): # дверь для выбора уров
         # Координаты левого верхнего угла с учетом размера экранна
         self.rect.x = x * (WIDTH / 1280)
         self.rect.y = y * (HEIGHT / 720)
+        self.button_play = True
 
     def update(self, *args):
         if args:
             if self.rect.collidepoint(args[0].pos):
                 self.image = LevelDoor.open_door_image
+                if self.button_play:
+                    button_sound.play()
+                    self.button_play = False
             else:
                 self.image = LevelDoor.door_image
+                self.button_play = True

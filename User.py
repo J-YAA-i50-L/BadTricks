@@ -14,14 +14,19 @@ class User(pygame.sprite.Sprite):  # Класс User для авторизаци
         # Координаты левого верхнего угла с учетом размера экранна
         self.rect.x = 995 * (WIDTH / 1069) + 1
         self.rect.y = 15 * (HEIGHT / 1020) + 1
+        self.button_play = True
 
     def update(self, *args):
         if args and self.rect.collidepoint(args[0].pos):
             pygame.draw.rect(self.image, pygame.Color('#3b83bd'),
                              (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)
+            if self.button_play:
+                button_sound.play()
+                self.button_play = False
         else:
             pygame.draw.rect(self.image, pygame.Color('#7da4c5'),
                              (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)
+            self.button_play = True
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
             signal_input('auth')
 
