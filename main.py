@@ -2,14 +2,14 @@ from StartScreen import *
 from User import *
 from ExitCross import *
 from GeneralFunctions import *
-
+from TopScreen import *
 
 def start_screen():
     fon = pygame.transform.scale(load_image('meny.jpg', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     Boor(meny_sprites)
     User(meny_sprites)
-    # Top(meny_sprites)
+    Top(meny_sprites)
     ExitСross(meny_sprites)
     while True:
         for event in pygame.event.get():
@@ -24,6 +24,10 @@ def start_screen():
                     screen.fill(pygame.Color(0, 0, 0))
                     signal_input(None)
                     return authorization()  # Завершаем работу стартового окна и открываем окно авторизации
+                if signal_output() == 'top':
+                    screen.fill(pygame.Color(0, 0, 0))
+                    signal_input(None)
+                    return top_users() # Завершаем работу стартового окна и открываем окно авторизации
         meny_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
@@ -58,5 +62,19 @@ def authorization():  # Авторизация
         pygame.display.flip()
         clock.tick(FPS)
 
+def top_users():  # топ играков
+    pygame.display.flip()
+    fon = pygame.transform.scale(load_image('top_user.png', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
+    screen.blit(fon, (0, 0))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    terminate()
+        top_sprites.draw(screen)
+        pygame.display.flip()
+        clock.tick(FPS)
 
 start_screen()

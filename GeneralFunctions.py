@@ -16,6 +16,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
 authorization_sprites = pygame.sprite.Group()
+top_sprites = pygame.sprite.Group()
 
 
 def load_image(name, color_key=None, cat='data'):

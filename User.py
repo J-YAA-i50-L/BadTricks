@@ -1,5 +1,6 @@
 from GeneralFunctions import *
-
+text_log = ''
+text_pas = ''
 
 class User(pygame.sprite.Sprite):  # Класс User для авторизации и сохранения прогресса
     # Открываем изображение и маштабируем
@@ -27,21 +28,16 @@ class User(pygame.sprite.Sprite):  # Класс User для авторизаци
 
 
 class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода информации в авторизации
-    # Открываем изображение и маштабируем
-    load_im = load_image("print_area.png", cat='Sprite_meny_play')
-    image = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
-                                             load_im.get_height() * (HEIGHT / 1381)))
-    imagee = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
-                                             load_im.get_height() * (HEIGHT / 1381)))
 
     def __init__(self, group, status):
         super().__init__(group)
         self.status = status
+        self.open()
         if self.status == "pas":  # Для пароля
-            self.image = PrintArea.imagee
-            self.rect = self.imagee.get_rect()
+            self.image = self.imagee_copy
+            self.rect = self.image.get_rect()
         else:
-            self.image = PrintArea.image
+            self.image = self.image_copy
             self.rect = self.image.get_rect()
         self.text_input = ''
         self.flag = False
@@ -54,6 +50,9 @@ class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода
             self.rect.y = 733 * (HEIGHT / 1381) + 1
 
     def update(self, *args):
+        global text_log
+        global text_pas
+        self.open()
         if args[0].type == pygame.MOUSEBUTTONDOWN:
             if args and self.rect.collidepoint(args[0].pos) and args[0].type == pygame.MOUSEBUTTONDOWN and not self.flag:
                 self.flag = True
@@ -62,14 +61,31 @@ class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода
                 signal_input(self.text_input)
         if args[0].type == pygame.KEYDOWN and self.flag:
             if len(self.text_input) <= 22:
-                if args[0].key == pygame.K_BACKSPACE and len(self.text_input) > 0:
+                if args[0].key == pygame.K_BACKSPACE:
                     self.text_input = self.text_input[:-1]
+                    if self.status == "pas":
+                        self.image = self.imagee_copy
+                    else:
+                        self.image = self.image_copy
                 else:
                     self.text_input += args[0].unicode
+            print(self.text_input)
             text = (self.text_input, (25, 5))
             font = pygame.font.SysFont('arial', int(80 * (HEIGHT / 1381)))
             string_rendered = font.render(text[0], 20, pygame.Color('black'))
             self.image.blit(string_rendered, text[-1])
+            if self.status == "pas":  # Для пароля
+                text_pas = self.text_input
+            else:
+                text_log = self.text_input
+
+    def open(self):
+        # Открываем изображение и маштабируем
+        load_im = load_image("print_area.png", cat='Sprite_meny_play')
+        self.image_copy = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
+                                                 load_im.get_height() * (HEIGHT / 1381)))
+        self.imagee_copy = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
+                                                  load_im.get_height() * (HEIGHT / 1381)))
 
 
 class ButtonRun(pygame.sprite.Sprite):
@@ -90,10 +106,12 @@ class ButtonRun(pygame.sprite.Sprite):
         self.rect.y = 900 * (HEIGHT / 1381) + 1
 
     def update(self, *args):
-        if args and self.rect.collidepoint(args[0].pos):
+        if args[0].type == pygame.MOUSEMOTION:
+            if args and self.rect.collidepoint(args[0].pos):
                 self.image = ButtonRun.image_clik
-        else:
-            self.image = ButtonRun.image
+            else:
+                self.image = ButtonRun.image
+        elif
 
 
 class Registration(pygame.sprite.Sprite):
