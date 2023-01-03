@@ -1,156 +1,20 @@
-import os
-import sys
-import pygame
-from tkinter import *
-from GeneralFunctions import terminate, load_image
-root = Tk()
-pygame.init()
-pygame.key.set_repeat(200, 70)
-# Разрешение экрана
-WIDTH = root.winfo_screenwidth()
-HEIGHT = root.winfo_screenheight()
-FPS = 50
-STEP = 10
-signal_start = None
-signal_auth = None
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-clock = pygame.time.Clock()
-meny_sprites = pygame.sprite.Group()
-authorization_sprites = pygame.sprite.Group()
-
-
-class Boor(pygame.sprite.Sprite):  # Класс Boor для начала новой игры
-    # Открываем изображение и маштабируем его
-    door = load_image("meny_door.jpg", cat='Sprite_meny_play')
-    image = pygame.transform.scale(door, (door.get_width() * (WIDTH / 1000),
-                                          door.get_height() * (HEIGHT / 1000)))
-
-    def __init__(self, group):
-        super().__init__(group)
-        self.image = Boor.image
-        self.rect = self.image.get_rect()
-        # Координаты левого верхнего угла с учетом размера экранна
-        self.rect.x = 412 * (WIDTH / 1069) + 1
-        self.rect.y = 858 * (HEIGHT / 1020) + 1
-
-    def update(self, *args):
-        if args and self.rect.collidepoint(args[0].pos):
-            pygame.draw.rect(self.image, pygame.Color('#cc5500'),
-                             (0, 0, self.image.get_width(), self.image.get_height()), 5)
-        else:
-            pygame.draw.rect(self.image, pygame.Color('#6f6677'),
-                             (0, 0, self.image.get_width(), self.image.get_height()), 5)
-
-
-class User(pygame.sprite.Sprite):  # Класс User для авторизации и сохранения прогресса
-    # Открываем изображение и маштабируем
-    user = load_image("sprite_user.png", cat='Sprite_meny_play')
-    image = pygame.transform.scale(user, ((user.get_width() / 2) * (WIDTH / 1000),
-                                          (user.get_height() / 1.85) * (HEIGHT / 1000)))
-
-    def __init__(self, group):
-        super().__init__(group)
-        self.image = User.image
-        self.rect = self.image.get_rect()
-        # Координаты левого верхнего угла с учетом размера экранна
-        self.rect.x = 995 * (WIDTH / 1069) + 1
-        self.rect.y = 15 * (HEIGHT / 1020) + 1
-
-    def update(self, *args):
-        global signal_start
-        if args and self.rect.collidepoint(args[0].pos):
-            pygame.draw.rect(self.image, pygame.Color('#3b83bd'),
-                             (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)
-        else:
-            pygame.draw.rect(self.image, pygame.Color('#7da4c5'),
-                             (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)
-        if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-            signal_start = 'auth'
-
-
-class Top(pygame.sprite.Sprite):  # Класс Top таблица лучших играков
-    # Открываем изображение и маштабируем
-    top = load_image("sprite_top.png", cat='Sprite_meny_play')
-    image = pygame.transform.scale(top, ((top.get_width() / 2) * (WIDTH / 1000),
-                                         (top.get_height() / 1.87) * (HEIGHT / 1000)))
-
-    def __init__(self, group):
-        super().__init__(group)
-        self.image = Top.image
-        self.rect = self.image.get_rect()
-        # Координаты левого верхнего угла с учетом размера экранна
-        self.rect.x = 905 * (WIDTH / 1069) + 1
-        self.rect.y = 15 * (HEIGHT / 1020) + 1
-
-    def update(self, *args):
-        global signal_start
-        if args and self.rect.collidepoint(args[0].pos):
-            pygame.draw.rect(self.image, pygame.Color('#3b83bd'),
-                             (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)
-        else:
-            pygame.draw.rect(self.image, pygame.Color('#7da4c5'),
-                             (0, 0, self.image.get_width(), self.image.get_height() + 1), 3)
-        if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-            signal_start = 'top'
-
-
-class ExitСross(pygame.sprite.Sprite):  # Класс ExitСross для выхода из игры или возвращение назад
-    # Открываем изображение и маштабируем
-    top = load_image("exit_cross.png", cat='Sprite_meny_play')
-    image = pygame.transform.scale(top, ((top.get_width()) * (WIDTH / 1069),
-                                         (top.get_height()) * (HEIGHT / 1020)))
-
-    def __init__(self, group, status='ter'):
-        super().__init__(group)
-        self.image = ExitСross.image
-        self.rect = self.image.get_rect()
-        self.status = status
-        # Координаты левого верхнего угла с учетом размера экранна
-        self.rect.x = 5 * (WIDTH / 1069) + 1
-        self.rect.y = 5 * (HEIGHT / 1020) + 1
-
-    def update(self, *args):
-        global signal_auth
-        if (args and args[0].type == pygame.MOUSEBUTTONDOWN and
-                self.rect.collidepoint(args[0].pos) and self.status == 'ter'):
-            terminate()
-        elif(args and args[0].type == pygame.MOUSEBUTTONDOWN and
-                self.rect.collidepoint(args[0].pos) and self.status == 'back'):
-            signal_auth = 'back'
-
-
-class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода информации в авторизации
-    # Открываем изображение и маштабируем
-    load_im = load_image("print_area.png", cat='Sprite_meny_play')
-    image = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
-                                             load_im.get_height() * (HEIGHT / 1381)))
-
-    def __init__(self, group, status='log'):
-        super().__init__(group)
-        self.image = PrintArea.image
-        self.rect = self.image.get_rect()
-        self.status = status
-        # Координаты левого верхнего угла с учетом размера экранна
-        if self.status == "log":  # Для логина
-            self.rect.x = 955 * (WIDTH / 2779) + 1
-            self.rect.y = 502 * (HEIGHT / 1381) + 1
-        if self.status == "pas":  # Для пароля
-            self.rect.x = 954 * (WIDTH / 2779) + 1
-            self.rect.y = 733 * (HEIGHT / 1381) + 1
-
-    # def update(self, *args):
-    #     if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-    #         terminate()
+from User import *
+from ExitCross import *
+from GeneralFunctions import *
+from TopScreen import *
+from LevelDoor import *
+from Door import *
+from Star import *
 
 
 def start_screen():
-    global signal_start
     fon = pygame.transform.scale(load_image('meny.jpg', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     Boor(meny_sprites)
     User(meny_sprites)
     Top(meny_sprites)
     ExitСross(meny_sprites)
+    music('menu')
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -160,23 +24,32 @@ def start_screen():
                     terminate()
             if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
                 meny_sprites.update(event)
-                if signal_start == 'auth':
+                if signal_output() == 'auth':
                     screen.fill(pygame.Color(0, 0, 0))
-                    signal_start = None
+                    signal_input(None)
                     return authorization()  # Завершаем работу стартового окна и открываем окно авторизации
+                if signal_output() == 'top':
+                    screen.fill(pygame.Color(0, 0, 0))
+                    signal_input(None)
+                    return top_users() # Завершаем работу стартового окна и открываем окно авторизации
+                elif signal_output() == 'lvl_choice':
+                    signal_input(None)
+                    return level_choice()
         meny_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
 
 def authorization():  # Авторизация
-    global signal_auth
     pygame.display.flip()
     fon = pygame.transform.scale(load_image('authorization.png', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
-    PrintArea(authorization_sprites)
+    PrintArea(authorization_sprites, 'log')
     PrintArea(authorization_sprites, 'pas')
     ExitСross(authorization_sprites, 'back')
+    ButtonRun(authorization_sprites)
+    Registration(authorization_sprites)
+    music('menu')
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -186,25 +59,75 @@ def authorization():  # Авторизация
                     terminate()
             if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
                 authorization_sprites.update(event)
-                if signal_auth == 'back':
+                if signal_output() == 'exit':
                     screen.fill(pygame.Color(0, 0, 0))
-                    signal_auth = None
+                    signal_input(None)
                     return start_screen()  # Завершаем работу на авторизации и открываем стартовое окно
+            if event.type == pygame.KEYDOWN:
+                authorization_sprites.update(event)
+
         authorization_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
 
-start_screen()
-authorization()
-running = True
+def level_choice(): # выбор уровня
+    ExitСross(level_choice_sprites, 'back') # выход
+    # каждая дверь отдельно
+    LevelDoor(level_choice_sprites, 250, 40, 'fiz')
+    LevelDoor(level_choice_sprites, 680, 40, 'xim')
+    LevelDoor(level_choice_sprites, 60, 415, 'tex')
+    LevelDoor(level_choice_sprites, 475, 415, 'bio')
+    LevelDoor(level_choice_sprites, 880, 415, 'lit')
+    # каждая звезда отдельно
+    Star(level_choice_sprites, 475, 60, 'fiz', 1)
+    Star(level_choice_sprites, 525, 80, 'fiz', 2)
+    Star(level_choice_sprites, 575, 60, 'fiz', 3)
+    Star(level_choice_sprites, 905, 60, 'xim', 1)
+    Star(level_choice_sprites, 955, 80, 'xim', 2)
+    Star(level_choice_sprites, 1005, 60, 'xim', 3)
+    Star(level_choice_sprites, 285, 415, 'tex', 1)
+    Star(level_choice_sprites, 335, 435, 'tex', 2)
+    Star(level_choice_sprites, 385, 415, 'tex', 3)
+    Star(level_choice_sprites, 700, 415, 'bio', 1)
+    Star(level_choice_sprites, 750, 435, 'bio', 2)
+    Star(level_choice_sprites, 800, 415, 'bio', 3)
+    Star(level_choice_sprites, 1105, 415, 'lit', 1)
+    Star(level_choice_sprites, 1155, 435, 'lit', 2)
+    Star(level_choice_sprites, 1205, 415, 'lit', 3)
+    bg = pygame.transform.scale(load_image('level_choise_bg.png', cat='Level_choise'), (WIDTH, HEIGHT))
+    music('menu')
+    while True:
+        screen.blit(bg, (0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    terminate()
+            if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
+                level_choice_sprites.update(event)
+                if signal_output() == 'exit':
+                    screen.fill(pygame.Color(0, 0, 0))
+                    signal_input(None)
+                    return start_screen()  # Завершаем работу выбора уровня и открываем стартовое окно
+        level_choice_sprites.draw(screen)
+        pygame.display.flip()
+        clock.tick(FPS)
 
-while running:
-    screen.fill(pygame.Color(0, 0, 0))
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            terminate()
+def top_users():  # топ играков
     pygame.display.flip()
-    clock.tick(FPS)
+    fon = pygame.transform.scale(load_image('top_user.png', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
+    screen.blit(fon, (0, 0))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    terminate()
+        top_sprites.draw(screen)
+        pygame.display.flip()
+        clock.tick(FPS)
 
-terminate()
+start_screen()
