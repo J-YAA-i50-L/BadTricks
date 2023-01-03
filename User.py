@@ -117,7 +117,6 @@ class ButtonRun(pygame.sprite.Sprite):
                 self.image = ButtonRun.image_clik
             else:
                 self.image = ButtonRun.image
-        elif
 
 
 class Registration(pygame.sprite.Sprite):

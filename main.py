@@ -1,10 +1,9 @@
-from StartScreen import *
 from User import *
 from ExitCross import *
 from GeneralFunctions import *
 from TopScreen import *
-from Top import *
 from LevelDoor import *
+from Door import *
 from Star import *
 
 
