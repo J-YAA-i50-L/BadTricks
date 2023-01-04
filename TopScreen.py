@@ -1,4 +1,5 @@
 from GeneralFunctions import *
+from sqlite3 import connect
 
 
 class Top(pygame.sprite.Sprite):  # Класс Top таблица лучших играков
@@ -30,3 +31,13 @@ class Top(pygame.sprite.Sprite):  # Класс Top таблица лучших �
             self.button_play = True
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
             signal_input('top')
+
+
+def top_str():
+    con = connect("BadTriks_bd.sqlite")
+    cur = con.cursor()
+    result = cur.execute(f"""SELECT DISTINCT login, rating FROM user ORDER BY rating DESC""").fetchall()
+    con.close()
+    if len(result) >= 5:
+        result = result[:5]
+    return [f'{n + 1}.  {i[0]}   {i[-1]}' for n, i in enumerate(result)]

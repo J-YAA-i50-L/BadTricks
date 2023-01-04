@@ -57,15 +57,14 @@ def authorization():  # Авторизация
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     terminate()
+                else:
+                    authorization_sprites.update(event)
             if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
                 authorization_sprites.update(event)
                 if signal_output() == 'exit':
                     screen.fill(pygame.Color(0, 0, 0))
                     signal_input(None)
                     return start_screen()  # Завершаем работу на авторизации и открываем стартовое окно
-            if event.type == pygame.KEYDOWN:
-                authorization_sprites.update(event)
-
         authorization_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
@@ -115,10 +114,20 @@ def level_choice(): # выбор уровня
         pygame.display.flip()
         clock.tick(FPS)
 
-def top_users():  # топ играков
+
+def top_users():  # Топ играков
     pygame.display.flip()
     fon = pygame.transform.scale(load_image('top_user.png', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
+    ExitСross(top_sprites, 'back')
+
+    font = pygame.font.SysFont('arial', int(110 * (HEIGHT / 1381)))
+    coord_x = 700
+    coord_y = 280
+    for line in top_str():
+        string_rendered = font.render(line, 100, pygame.Color('black'))
+        screen.blit(string_rendered, (coord_x, coord_y))
+        coord_y += 130
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -126,6 +135,12 @@ def top_users():  # топ играков
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     terminate()
+            if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
+                top_sprites.update(event)
+                if signal_output() == 'exit':
+                    screen.fill(pygame.Color(0, 0, 0))
+                    signal_input(None)
+                    return start_screen()  # Завершаем работу на авторизации и открываем стартовое окно
         top_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

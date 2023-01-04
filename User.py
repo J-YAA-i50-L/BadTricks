@@ -1,6 +1,4 @@
 from GeneralFunctions import *
-text_log = ''
-text_pas = ''
 
 
 class User(pygame.sprite.Sprite):  # Класс User для авторизации и сохранения прогресса
