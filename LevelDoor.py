@@ -30,3 +30,6 @@ class LevelDoor(pygame.sprite.Sprite): # дверь для выбора уров
             else:
                 self.image = LevelDoor.door_image
                 self.button_play = True
+        if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
+            if self.predmet == 'tex':
+                signal_input('lvl1')
