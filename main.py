@@ -5,6 +5,8 @@ from GeneralFunctions import *
 from Top import *
 from LevelDoor import *
 from Star import *
+from Lvl1 import *
+from Pit import *
 
 
 def start_screen():
@@ -102,7 +104,35 @@ def level_choice(): # выбор уровня
                     screen.fill(pygame.Color(0, 0, 0))
                     signal_input(None)
                     return start_screen()  # Завершаем работу выбора уровня и открываем стартовое окно
+                elif signal_output() == 'lvl1':
+                    screen.fill(pygame.Color(0, 0, 0))
+                    signal_input(None)
+                    return lvl1() # Завершаем работу выбора уровня и открываем первый уровень
         level_choice_sprites.draw(screen)
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+def lvl1():
+    generate_level(load_level('test_lvl.txt'), Tile1)
+    ExitСross(level1_sprites, 'back')
+    Pit(level1_sprites, 500, 102)
+    music('lvl1')
+
+    while True:
+        screen.fill((0, 0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    terminate()
+            level1_sprites.update(event)
+            if signal_output() == 'exit':
+                screen.fill(pygame.Color(0, 0, 0))
+                signal_input(None)
+                return level_choice()
+        level1_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 

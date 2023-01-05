@@ -17,8 +17,11 @@ clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
 authorization_sprites = pygame.sprite.Group()
 level_choice_sprites = pygame.sprite.Group()
+top_sprites = pygame.sprite.Group()
+level1_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
 menu_music = False
+lvl1_music = False
 
 
 def load_image(name, color_key=None, cat='data'):
@@ -54,10 +57,46 @@ def terminate():
     sys.exit()
 
 
-def music(type_music):
+def music(type_music): # добавляем музыку в зависимомти от текущего экрана
     global menu_music
+    global lvl1_music
     if type_music == 'menu':
         if not menu_music:
             pygame.mixer.music.load('Music/01Menu.wav')
             pygame.mixer.music.play(-1)
             menu_music = True
+            lvl1_music = False
+    elif type_music == 'lvl1':
+        if not lvl1_music:
+            pygame.mixer.music.load('Music/04Chapter 1 Theme.wav')
+            pygame.mixer.music.play(-1)
+            menu_music = False
+            lvl1_music = True
+
+
+def load_level(filename):
+    filename = "data/" + filename
+    # читаем уровень, убирая символы перевода строки
+    with open(filename, 'r') as mapFile:
+        level_map = [line for line in mapFile]
+
+    return level_map
+
+
+def generate_level(level, tile): # генерациы уровня
+    for y in range(len(level)):
+        for x in range(len(level[y])):
+            if level[y][x] == '_':
+                tile('floor', x, y)
+            elif level[y][x] == '|':
+                tile('wall', x, y)
+            elif level[y][x] == '.':
+                tile('fon', x, y)
+            elif level[y][x] == '0':
+                tile('window', x, y)
+            elif level[y][x] == ' ':
+                tile('sky', x, y)
+            elif level[y][x] == '#':
+                tile('roof', x, y)
+            elif level[y][x] == 'B':
+                tile('box', x, y)
