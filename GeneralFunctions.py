@@ -11,15 +11,22 @@ HEIGHT = int(screen_info[3][7:])
 FPS = 50
 STEP = 10
 signal_start = ''
+text_log = ''
+text_pas = ''
+name_info = ''
 signal_auth = None
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
 authorization_sprites = pygame.sprite.Group()
 top_sprites = pygame.sprite.Group()
+reg_sprites = pygame.sprite.Group()
+top_sprites = pygame.sprite.Group()
 level_choice_sprites = pygame.sprite.Group()
+level1_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
 menu_music = False
+lvl1_music = False
 
 
 def load_image(name, color_key=None, cat='data'):
@@ -50,15 +57,63 @@ def signal_input(signal):
     signal_start = signal
 
 
-def terminate():
+def terminate():  # Программа завершает работу
     pygame.quit()
     sys.exit()
 
 
-def music(type_music):
+def music(type_music):  # Добавляем музыку в зависимомти от текущего экрана
     global menu_music
+    global lvl1_music
     if type_music == 'menu':
         if not menu_music:
             pygame.mixer.music.load('Music/01Menu.wav')
             pygame.mixer.music.play(-1)
             menu_music = True
+            lvl1_music = False
+    elif type_music == 'lvl1':
+        if not lvl1_music:
+            pygame.mixer.music.load('Music/04Chapter 1 Theme.wav')
+            pygame.mixer.music.play(-1)
+            menu_music = False
+            lvl1_music = True
+
+
+def load_level(filename):
+    filename = "data/" + filename
+    # читаем уровень, убирая символы перевода строки
+    with open(filename, 'r') as mapFile:
+        level_map = [line for line in mapFile]
+
+    return level_map
+
+
+def generate_level(level, tile): # генерациы уровня
+    for y in range(len(level)):
+        for x in range(len(level[y])):
+            if level[y][x] == '_':
+                tile('floor', x, y)
+            elif level[y][x] == '|':
+                tile('wall', x, y)
+            elif level[y][x] == '.':
+                tile('fon', x, y)
+            elif level[y][x] == '0':
+                tile('window', x, y)
+            elif level[y][x] == ' ':
+                tile('sky', x, y)
+            elif level[y][x] == '#':
+                tile('roof', x, y)
+            elif level[y][x] == 'B':
+                tile('box', x, y)
+
+
+def read_progress(name):  # Чтение файла c прогресом
+    with open(f"progress/{name}", encoding="utf-8") as f:
+        read_data = f.read().split('\n')
+    return read_data
+
+
+def recording_progress(name):  # Запись прогреса в файл прогерсса
+    with open(f"progress/{name}", "w") as f:
+        print('***', file=f)
+    # Пока не доделана до идеала

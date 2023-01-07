@@ -1,6 +1,5 @@
 from GeneralFunctions import *
-text_log = ''
-text_pas = ''
+from sqlite3 import connect
 
 
 class User(pygame.sprite.Sprite):  # Класс User для авторизации и сохранения прогресса
@@ -75,7 +74,6 @@ class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода
                         self.image = self.image_copy
                 else:
                     self.text_input += args[0].unicode
-            print(self.text_input)
             text = (self.text_input, (25, 5))
             font = pygame.font.SysFont('arial', int(80 * (HEIGHT / 1381)))
             string_rendered = font.render(text[0], 20, pygame.Color('black'))
@@ -94,7 +92,7 @@ class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода
                                                   load_im.get_height() * (HEIGHT / 1381)))
 
 
-class ButtonRun(pygame.sprite.Sprite):
+class ButtonRun(pygame.sprite.Sprite):  # Кнопка "продолжить"
     # Открываем изображение и маштабируем
     load_im = load_image("button_run.png", cat='Sprite_meny_play')
     image = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
@@ -103,7 +101,7 @@ class ButtonRun(pygame.sprite.Sprite):
     image_clik = pygame.transform.scale(load_im_clik, (load_im.get_width() * (WIDTH / 2779),
                                              load_im.get_height() * (HEIGHT / 1381)))
 
-    def __init__(self, group):
+    def __init__(self, group):  # При созданиии класса
         super().__init__(group)
         self.image = ButtonRun.image
         self.rect = self.image.get_rect()
@@ -111,15 +109,22 @@ class ButtonRun(pygame.sprite.Sprite):
         self.rect.x = 1055 * (WIDTH / 2779) + 1
         self.rect.y = 900 * (HEIGHT / 1381) + 1
 
-    def update(self, *args):
-        if args[0].type == pygame.MOUSEMOTION:
-            if args and self.rect.collidepoint(args[0].pos):
-                self.image = ButtonRun.image_clik
+    def update(self, *args):  # Результаты события
+        if args[0].type == pygame.MOUSEMOTION or args[0].type == pygame.MOUSEBUTTONDOWN:  # Если событие мыши
+            if args and self.rect.collidepoint(args[0].pos):  # Если мышь наведена на кнопу
+                self.image = ButtonRun.image_clik  # Меняем изображение
             else:
-                self.image = ButtonRun.image
+                self.image = ButtonRun.image  # Меняем на исходное
+            if args and self.rect.collidepoint(args[0].pos) and args[0].type == pygame.MOUSEBUTTONDOWN:
+                # Если была нажата кнопка мыши проверяем логин и пароль
+                # Если они совпадают с данными бд мы сохраняем файл с прогресом и запускаем окно выбора уровня
+                if proverca_user(text_log, text_pas):
+                    signal_input('run')
+                else:
+                    signal_input('not_run')
 
 
-class Registration(pygame.sprite.Sprite):
+class Registration(pygame.sprite.Sprite):  # Конпка регистрация
     load_im = load_image("registration.png", cat='Sprite_meny_play')
     image = pygame.transform.scale(load_im, (load_im.get_width() * 1.5 * (WIDTH / 2779),
                                              load_im.get_height() * 1.5 * (HEIGHT / 1381)))
@@ -131,3 +136,40 @@ class Registration(pygame.sprite.Sprite):
         # Координаты левого верхнего угла с учетом размера экранна
         self.rect.x = 2095 * (WIDTH / 2779) + 1
         self.rect.y = 15 * (HEIGHT / 1381) + 1
+
+    def update(self, *args):
+        if args[0].type == pygame.MOUSEMOTION or args[0].type == pygame.MOUSEBUTTONDOWN:  # Если событие мыши
+            if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
+                signal_input('registration')
+
+
+class VerdictUsers(pygame.sprite.Sprite):
+    load_im = load_image("printverdict.png", cat='Sprite_meny_play')
+    image = pygame.transform.scale(load_im, (load_im.get_width() * 1.5 * (WIDTH / 2779),
+                                             load_im.get_height() * 1.5 * (HEIGHT / 1381)))
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = VerdictUsers.image
+        self.rect = self.image.get_rect()
+        # Координаты левого верхнего угла с учетом размера экранна
+        self.rect.x = 1105 * (WIDTH / 2779) + 1
+        self.rect.y = 1000 * (HEIGHT / 1381) + 1
+        text = ('Не верный логин или пароль', (35, 5))
+        font = pygame.font.SysFont('arial', int(40 * (HEIGHT / 1381)))
+        string_rendered = font.render(text[0], 20, pygame.Color('black'))
+        self.image.blit(string_rendered, text[-1])
+
+
+def proverca_user(log, pas):  # Проверка логина и пароля
+    global name_info
+    con = connect("BadTriks_bd.sqlite")
+    cur = con.cursor()
+    result = cur.execute(f"""SELECT DISTINCT login, password, progress FROM user ORDER BY rating DESC""").fetchall()
+    con.close()
+    for i in result:
+        if log == i[0] and pas == str(i[1]):
+            name_info = i[2]
+            return True
+        else:
+            return False
