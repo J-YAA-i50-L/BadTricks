@@ -192,11 +192,11 @@ def level_choice():  # Выбор уровня
 def lvl1():
     generate_level(load_level('test_lvl.txt'), Tile1)
     ExitСross(level1_sprites, 'back')
-    Pit(level1_sprites, 500, 102)
+    pit = Pit(level1_sprites, 500, 102)
     music('lvl1')
-
     while True:
         screen.fill((0, 0, 0))
+        pit.animation()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
