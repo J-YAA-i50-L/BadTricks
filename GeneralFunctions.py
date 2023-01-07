@@ -57,12 +57,12 @@ def signal_input(signal):
     signal_start = signal
 
 
-def terminate():
+def terminate():  # Программа завершает работу
     pygame.quit()
     sys.exit()
 
 
-def music(type_music): # добавляем музыку в зависимомти от текущего экрана
+def music(type_music):  # Добавляем музыку в зависимомти от текущего экрана
     global menu_music
     global lvl1_music
     if type_music == 'menu':
@@ -105,3 +105,15 @@ def generate_level(level, tile): # генерациы уровня
                 tile('roof', x, y)
             elif level[y][x] == 'B':
                 tile('box', x, y)
+
+
+def read_progress(name):  # Чтение файла c прогресом
+    with open(f"progress/{name}", encoding="utf-8") as f:
+        read_data = f.read().split('\n')
+    return read_data
+
+
+def recording_progress(name):  # Запись прогреса в файл прогерсса
+    with open(f"progress/{name}", "w") as f:
+        print('***', file=f)
+    # Пока не доделана до идеала
