@@ -72,6 +72,10 @@ def authorization():  # Авторизация
                     screen.fill(pygame.Color(0, 0, 0))
                     signal_input(None)
                     return registration()  # Завершаем работу на авторизации и открываем стартовое окно
+                if signal_output() == 'run':
+                    pass
+                if signal_output() == 'not_run':
+                    VerdictUsers(authorization_sprites)
         authorization_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

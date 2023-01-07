@@ -121,7 +121,7 @@ class ButtonRun(pygame.sprite.Sprite):  # Кнопка "продолжить"
                 if proverca_user(text_log, text_pas):
                     signal_input('run')
                 else:
-                    print('Не верное имя или пароль')
+                    signal_input('not_run')
 
 
 class Registration(pygame.sprite.Sprite): # Конпка регистрация
@@ -143,9 +143,26 @@ class Registration(pygame.sprite.Sprite): # Конпка регистрация
                 signal_input('registration')
 
 
+class VerdictUsers(pygame.sprite.Sprite):
+    load_im = load_image("printverdict.png", cat='Sprite_meny_play')
+    image = pygame.transform.scale(load_im, (load_im.get_width() * 1.5 * (WIDTH / 2779),
+                                             load_im.get_height() * 1.5 * (HEIGHT / 1381)))
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = VerdictUsers.image
+        self.rect = self.image.get_rect()
+        # Координаты левого верхнего угла с учетом размера экранна
+        self.rect.x = 1105 * (WIDTH / 2779) + 1
+        self.rect.y = 1000 * (HEIGHT / 1381) + 1
+        text = ('Не верный логин или пароль', (35, 5))
+        font = pygame.font.SysFont('arial', int(40 * (HEIGHT / 1381)))
+        string_rendered = font.render(text[0], 20, pygame.Color('black'))
+        self.image.blit(string_rendered, text[-1])
+
+
 def proverca_user(log, pas):  # Проверка логина и пароля
     global name_info
-    print(log, pas)
     con = connect("BadTriks_bd.sqlite")
     cur = con.cursor()
     result = cur.execute(f"""SELECT DISTINCT login, password, progress FROM user ORDER BY rating DESC""").fetchall()
