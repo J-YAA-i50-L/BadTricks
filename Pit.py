@@ -15,5 +15,40 @@ class Pit(pygame.sprite.Sprite):
         # Координаты левого верхнего угла с учетом размера экранна
         self.rect.x = x * (WIDTH / 1700)
         self.rect.y = y * (HEIGHT / 850)
-        self.frame_counter = 0
-        self.stop = True
+        self.stop_counter = 0
+        self.move_counter = 0
+        self.rmove = False
+        self.lmove = False
+
+    def update(self, *args):
+        if args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_RIGHT:
+            self.rmove = True
+            self.lmove = False
+            self.rect = self.rect.move(5, 0)
+        elif args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_LEFT:
+            self.rmove = False
+            self.lmove = True
+            self.rect = self.rect.move(-5, 0)
+        else:
+            self.rmove = False
+            self.lmove = False
+
+    def animation(self):
+        if self.rmove:
+            self.move_counter += 1
+            if self.move_counter // 20 % 2 == 1:
+                self.image = self.frames[4]
+            else:
+                self.image = self.frames[5]
+        elif self.lmove:
+            self.move_counter += 1
+            if self.move_counter // 20 % 2 == 1:
+                self.image = self.frames[6]
+            else:
+                self.image = self.frames[7]
+        else:
+            self.stop_counter += 1
+            if self.stop_counter // 25 % 2 == 1:
+                self.image = self.frames[1]
+            else:
+                self.image = self.frames[0]
