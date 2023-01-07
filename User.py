@@ -124,7 +124,7 @@ class ButtonRun(pygame.sprite.Sprite):  # Кнопка "продолжить"
                     signal_input('not_run')
 
 
-class Registration(pygame.sprite.Sprite): # Конпка регистрация
+class Registration(pygame.sprite.Sprite):  # Конпка регистрация
     load_im = load_image("registration.png", cat='Sprite_meny_play')
     image = pygame.transform.scale(load_im, (load_im.get_width() * 1.5 * (WIDTH / 2779),
                                              load_im.get_height() * 1.5 * (HEIGHT / 1381)))
