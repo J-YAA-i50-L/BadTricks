@@ -162,14 +162,13 @@ class VerdictUsers(pygame.sprite.Sprite):
 
 
 def proverca_user(log, pas):  # Проверка логина и пароля
-    global name_info
     con = connect("BadTriks_bd.sqlite")
     cur = con.cursor()
     result = cur.execute(f"""SELECT DISTINCT login, password, progress FROM user ORDER BY rating DESC""").fetchall()
     con.close()
     for i in result:
         if log == i[0] and pas == str(i[1]):
-            name_info = i[2]
+            global name_info
+            file_progress(i[2])
             return True
-        else:
-            return False
+    return False

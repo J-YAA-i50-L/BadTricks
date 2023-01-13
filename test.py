@@ -1,36 +1,52 @@
-from GeneralFunctions import *
+import sys
 
-tile_images = {'floor': load_image('Floor0.png', cat='Tex'), 'wall':load_image('Wall0.png', cat='Tex')}
-all_sprites = pygame.sprite.Group()
-
-
-class Tile(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
-        super().__init__(all_sprites)
-        floor = tile_images[tile_type]
-        self.image = pygame.transform.scale(floor, (floor.get_width() * (WIDTH / 1600),
-                                        floor.get_height() * (HEIGHT / 800)))
-        self.rect = self.image.get_rect().move(32 * WIDTH / 1600 * pos_x, 32 * HEIGHT / 800 * pos_y)
+from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QCheckBox, QPlainTextEdit, QLineEdit
 
 
-def generate_level(level):
-    for y in range(len(level)):
-        for x in range(len(level[y])):
-            if level[y][x] == '_':
-                Tile('floor', x, y)
-            elif level[y][x] == '|':
-                Tile('wall', x, y)
+class Main(QWidget):
+    def init(self):
+        super().init()
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(300, 300, 500, 500)
+        self.setWindowTitle('Заказ в Макдональдсе')
+
+        self.txt = QPlainTextEdit('Ваш заказ:\n', self)
+        self.txt.move(10, 120)
+        self.txt.setEnabled(False)
+
+        self.cb1 = QCheckBox('Чизбургер', self)
+        self.cb1.move(10, 10)
+
+        self.cb2 = QCheckBox('Гамбургер', self)
+        self.cb2.move(10, 30)
+
+        self.cb3 = QCheckBox('Кока-кола', self)
+        self.cb3.move(10, 50)
+
+        self.cb4 = QCheckBox('Нагетсы', self)
+        self.cb4.move(10, 70)
+
+        self.btn = QPushButton('Заказать', self)
+        self.btn.adjustSize()
+        self.btn.move(10, 90)
+        self.btn.clicked.connect(self.zakaz)
+
+    def zakaz(self):
+        self.txt.setPlainText('')
+        if self.cb1.isChecked():
+            self.txt.setPlainText(self.txt.toPlainText() + 'Чизбургер' + '\n')
+        if self.cb2.isChecked():
+            self.txt.setPlainText(self.txt.toPlainText() + 'Гамбургер' + '\n')
+        if self.cb3.isChecked():
+            self.txt.setPlainText(self.txt.toPlainText() + 'Кока-кола' + '\n')
+        if self.cb4.isChecked():
+            self.txt.setPlainText(self.txt.toPlainText() + 'Нагетсы' + '\n')
 
 
-while True:
-    screen.fill((0, 0, 0))
-    generate_level(load_level('test_lvl.txt'))
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            terminate()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                terminate()
-    all_sprites.draw(screen)
-    pygame.display.flip()
-    clock.tick(FPS)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main = Main()
+    main.show()
+    sys.exit(app.exec())
