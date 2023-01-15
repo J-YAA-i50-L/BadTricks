@@ -21,9 +21,9 @@ meny_sprites = pygame.sprite.Group()
 authorization_sprites = pygame.sprite.Group()
 top_sprites = pygame.sprite.Group()
 reg_sprites = pygame.sprite.Group()
-top_sprites = pygame.sprite.Group()
 level_choice_sprites = pygame.sprite.Group()
 level1_sprites = pygame.sprite.Group()
+timer_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
 menu_music = False
 lvl1_music = False
@@ -105,6 +105,8 @@ def generate_level(level, tile): # генерациы уровня
                 tile('roof', x, y)
             elif level[y][x] == 'B':
                 tile('box', x, y)
+            elif level[y][x] == 'S':
+                tile('book', x, y)
 
 
 def read_progress(name):  # Чтение файла c прогресом
