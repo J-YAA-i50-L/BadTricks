@@ -87,8 +87,8 @@ def registration():  # Регистрация
     pygame.display.flip()
     fon = pygame.transform.scale(load_image('registration_user.png', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
-    PrintArea(reg_sprites, 'log')
-    PrintArea(reg_sprites, 'pas')
+    PrintArea(reg_sprites, 'log', 'reg')
+    PrintArea(reg_sprites, 'pas', 'reg')
     ExitСross(reg_sprites, 'back')
     ButtonRun(reg_sprites)
     music('menu')
@@ -120,6 +120,7 @@ def top_users():  # Топ играков
     font = pygame.font.SysFont('arial', int(110 * (HEIGHT / 1381)))
     coord_x = 1000 * (WIDTH / 2648)
     coord_y = 360 * (HEIGHT / 1381)
+    music('menu')
     for line in top_str():
         string_rendered = font.render(line, 100, pygame.Color('black'))
         screen.blit(string_rendered, (coord_x, coord_y))
