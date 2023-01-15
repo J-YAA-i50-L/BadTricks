@@ -90,7 +90,7 @@ def registration():  # Регистрация
     PrintArea(reg_sprites, 'log', 'reg')
     PrintArea(reg_sprites, 'pas', 'reg')
     ExitСross(reg_sprites, 'back')
-    ButtonRun(reg_sprites)
+    ButtonRun(reg_sprites, 'reg')
     music('menu')
     while True:
         for event in pygame.event.get():
