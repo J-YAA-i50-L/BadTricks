@@ -14,7 +14,7 @@ class Timer(pygame.sprite.Sprite):
         self.rect.y = 5 * (HEIGHT / 850)
         self.time_counter = 0
         self.game_time = 0
-        self.number = None
+        self.number = Number(self.group, '0', 0)
 
     def update_time(self):
         self.time_counter += 1
@@ -22,8 +22,9 @@ class Timer(pygame.sprite.Sprite):
             self.game_time += 1
             if self.game_time <= 9999:
                 for i in range(len(list(str(self.game_time)))):
-                    pygame.draw.rect(self.image, pygame.Color('#6f6677'),
-                                     (0, 0, 160 * (WIDTH // 1700), 50))
+                    if self.number.get_num() != int(list(str(self.game_time))[self.number.get_nom()]):
+                        self.number.kill()
+                        print(1)
                     self.number = Number(self.group, list(str(self.game_time))[i], i)
 
     def get_time(self):
@@ -52,8 +53,12 @@ class Number(pygame.sprite.Sprite):
         self.rect.y = -20
         self.rect.x = (WIDTH / 1700) * 1360 + nomer * 40 * (WIDTH / 1700)
         self.num = num
+        self.nom = nomer
 
     def get_num(self):
         return int(self.num)
+
+    def get_nom(self):
+        return int(self.nom)
 
 

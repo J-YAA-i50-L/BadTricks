@@ -105,8 +105,6 @@ def generate_level(level, tile): # генерациы уровня
                 tile('roof', x, y)
             elif level[y][x] == 'B':
                 tile('box', x, y)
-            elif level[y][x] == 'S':
-                tile('book', x, y)
 
 
 def read_progress(name):  # Чтение файла c прогресом
