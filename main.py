@@ -9,6 +9,7 @@ from Star import *
 from Lvl1 import *
 from Pit import *
 from Timer import *
+from Stear import *
 
 
 def start_screen():
@@ -197,6 +198,9 @@ def lvl1():
     pit = Pit(level1_sprites, 500, 102)
     timer = Timer(level1_sprites)
     music('lvl1')
+    Fon(level1_sprites)
+    Number(level1_sprites, '0', 0)
+    Stear(level1_sprites, 0, 0)
     while True:
         screen.fill((0, 0, 0))
         pit.animation()
