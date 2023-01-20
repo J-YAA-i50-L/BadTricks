@@ -1,36 +1,33 @@
-from GeneralFunctions import *
-
-tile_images = {'floor': load_image('Floor0.png', cat='Tex'), 'wall':load_image('Wall0.png', cat='Tex')}
-all_sprites = pygame.sprite.Group()
+import pygame
 
 
-class Tile(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
-        super().__init__(all_sprites)
-        floor = tile_images[tile_type]
-        self.image = pygame.transform.scale(floor, (floor.get_width() * (WIDTH / 1600),
-                                        floor.get_height() * (HEIGHT / 800)))
-        self.rect = self.image.get_rect().move(32 * WIDTH / 1600 * pos_x, 32 * HEIGHT / 800 * pos_y)
+def draw(count):
+    global size
+    k = 300 // (count * 2)
+    x1 = 0
+    y1 = 0
+    h = 300
+    w = 300
+    for i in range(count):
+        pygame.draw.ellipse(screen, (255, 255, 255), (x1, y1, h, w), -2)
+        pygame.draw.ellipse(screen, (255, 255, 255), (y1, x1, w, h), 1)
+        y1 += k
+        w -= 2 * k
 
 
-def generate_level(level):
-    for y in range(len(level)):
-        for x in range(len(level[y])):
-            if level[y][x] == '_':
-                Tile('floor', x, y)
-            elif level[y][x] == '|':
-                Tile('wall', x, y)
+n = input()
+f = True
+if n in '.':
+    print("Неправильный формат ввода")
+    f = False
 
-
-while True:
-    screen.fill((0, 0, 0))
-    generate_level(load_level('test_lvl.txt'))
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            terminate()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                terminate()
-    all_sprites.draw(screen)
-    pygame.display.flip()
-    clock.tick(FPS)
+if __name__ == '__main__' and f:
+    pygame.init()
+    pygame.display.set_caption('Сфера')
+    size = width, height = 300, 300
+    screen = pygame.display.set_mode(size)
+    screen.fill(pygame.Color('black'))
+    draw(int(n))
+    while pygame.event.wait().type != pygame.QUIT:
+        pygame.display.flip()
+    pygame.quit()

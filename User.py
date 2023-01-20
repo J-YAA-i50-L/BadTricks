@@ -3,6 +3,7 @@ from sqlite3 import connect
 
 
 class User(pygame.sprite.Sprite):  # Класс User для авторизации и сохранения прогресса
+    """Конопка на начальном окне для перехода в окно авторизвции"""
     # Открываем изображение и маштабируем
     user = load_image("sprite_user.png", cat='Sprite_meny_play')
     image = pygame.transform.scale(user, ((user.get_width() / 2) * (WIDTH / 1000),
@@ -32,11 +33,12 @@ class User(pygame.sprite.Sprite):  # Класс User для авторизаци
             signal_input('auth')
 
 
-class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода информации в авторизации
-
-    def __init__(self, group, status):
+class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода информации
+    """Класс PrintArea для ввода информации(логина, пароля)"""
+    def __init__(self, group, status, screen='aut'):
         super().__init__(group)
         self.status = status
+        self.screen = screen
         self.open()
         if self.status == "pas":  # Для пароля
             self.image = self.imagee_copy
@@ -48,31 +50,40 @@ class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода
         self.flag = False
         # Координаты левого верхнего угла с учетом размера экранна
         if self.status == "log":  # Для логина
-            self.rect.x = 955 * (WIDTH / 2779) + 1
-            self.rect.y = 502 * (HEIGHT / 1381) + 1
+            if screen == 'aut':
+                self.rect.x = 955 * (WIDTH / 2779) + 1
+                self.rect.y = 502 * (HEIGHT / 1381) + 1
+            else:
+                self.rect.x = 970 * (WIDTH / 2779) + 1
+                self.rect.y = 502 * (HEIGHT / 1381) + 1
         if self.status == "pas":  # Для пароля
-            self.rect.x = 954 * (WIDTH / 2779) + 1
-            self.rect.y = 733 * (HEIGHT / 1381) + 1
+            if screen == 'aut':
+                self.rect.x = 954 * (WIDTH / 2779) + 1
+                self.rect.y = 733 * (HEIGHT / 1381) + 1
+            else:
+                self.rect.x = 971 * (WIDTH / 2779) + 1
+                self.rect.y = 718 * (HEIGHT / 1381) + 1
 
     def update(self, *args):
         global text_log
         global text_pas
         self.open()
         if args[0].type == pygame.MOUSEBUTTONDOWN:
-            if args and self.rect.collidepoint(args[0].pos) and args[0].type == pygame.MOUSEBUTTONDOWN and not self.flag:
+            if args and self.rect.collidepoint(args[0].pos) and \
+                    args[0].type == pygame.MOUSEBUTTONDOWN and not self.flag:
                 self.flag = True
             else:
                 self.flag = False
                 signal_input(self.text_input)
         if args[0].type == pygame.KEYDOWN and self.flag:
-            if len(self.text_input) <= 22:
-                if args[0].key == pygame.K_BACKSPACE:
-                    self.text_input = self.text_input[:-1]
-                    if self.status == "pas":
-                        self.image = self.imagee_copy
-                    else:
-                        self.image = self.image_copy
+            if args[0].key == pygame.K_BACKSPACE:
+                self.text_input = self.text_input[:-1]
+                if self.status == "pas":
+                    self.image = self.imagee_copy
                 else:
+                    self.image = self.image_copy
+            else:
+                if len(self.text_input) <= 16:
                     self.text_input += args[0].unicode
             text = (self.text_input, (25, 5))
             font = pygame.font.SysFont('arial', int(80 * (HEIGHT / 1381)))
@@ -85,14 +96,22 @@ class PrintArea(pygame.sprite.Sprite):  # Класс PrintArea для ввода
 
     def open(self):
         # Открываем изображение и маштабируем
-        load_im = load_image("print_area.png", cat='Sprite_meny_play')
-        self.image_copy = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
+        if self.screen == 'aut':
+            load_im = load_image("print_area.png", cat='Sprite_meny_play')
+            self.image_copy = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
+                                                     load_im.get_height() * (HEIGHT / 1381)))
+            self.imagee_copy = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
+                                                      load_im.get_height() * (HEIGHT / 1381)))
+        else:
+            load_im = load_image("print_area.png", cat='Sprite_meny_play')
+            self.image_copy = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
                                                  load_im.get_height() * (HEIGHT / 1381)))
-        self.imagee_copy = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
+            self.imagee_copy = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
                                                   load_im.get_height() * (HEIGHT / 1381)))
 
 
 class ButtonRun(pygame.sprite.Sprite):  # Кнопка "продолжить"
+    """Конопка "Продолжить", при авторизации и регистрации"""
     # Открываем изображение и маштабируем
     load_im = load_image("button_run.png", cat='Sprite_meny_play')
     image = pygame.transform.scale(load_im, (load_im.get_width() * (WIDTH / 2779),
@@ -101,9 +120,10 @@ class ButtonRun(pygame.sprite.Sprite):  # Кнопка "продолжить"
     image_clik = pygame.transform.scale(load_im_clik, (load_im.get_width() * (WIDTH / 2779),
                                              load_im.get_height() * (HEIGHT / 1381)))
 
-    def __init__(self, group):  # При созданиии класса
+    def __init__(self, group, screen='aut'):  # При созданиии класса
         super().__init__(group)
         self.image = ButtonRun.image
+        self.screen = screen
         self.rect = self.image.get_rect()
         # Координаты левого верхнего угла с учетом размера экранна
         self.rect.x = 1055 * (WIDTH / 2779) + 1
@@ -118,13 +138,23 @@ class ButtonRun(pygame.sprite.Sprite):  # Кнопка "продолжить"
             if args and self.rect.collidepoint(args[0].pos) and args[0].type == pygame.MOUSEBUTTONDOWN:
                 # Если была нажата кнопка мыши проверяем логин и пароль
                 # Если они совпадают с данными бд мы сохраняем файл с прогресом и запускаем окно выбора уровня
-                if proverca_user(text_log, text_pas):
-                    signal_input('run')
-                else:
-                    signal_input('not_run')
+                if self.screen == 'aut':
+                    if proverca_user(text_log, text_pas):
+                        signal_input('run')
+                    else:
+                        signal_input('not_run')
+                elif self.screen == 'reg':
+                    if proverca_new_user(text_log) and len(text_pas) != 0:
+                        file = f'info_{text_log}.txt'
+                        with open(f"data/progress/{file}", "w") as f:
+                            print('', file=f)
+                        file_progress(file)
+                        new_user(text_log, text_pas, file)
+                        signal_input('run')
 
 
 class Registration(pygame.sprite.Sprite):  # Конпка регистрация
+    """Конопка "Регистрация", для перехода на окно регистрации нового пользователя"""
     load_im = load_image("registration.png", cat='Sprite_meny_play')
     image = pygame.transform.scale(load_im, (load_im.get_width() * 1.5 * (WIDTH / 2779),
                                              load_im.get_height() * 1.5 * (HEIGHT / 1381)))
@@ -162,14 +192,33 @@ class VerdictUsers(pygame.sprite.Sprite):
 
 
 def proverca_user(log, pas):  # Проверка логина и пароля
-    global name_info
+    """Проверка логина и пароля введенные пользователем, при авторизации"""
     con = connect("BadTriks_bd.sqlite")
     cur = con.cursor()
     result = cur.execute(f"""SELECT DISTINCT login, password, progress FROM user ORDER BY rating DESC""").fetchall()
     con.close()
     for i in result:
         if log == i[0] and pas == str(i[1]):
-            name_info = i[2]
+            file_progress(i[2])
             return True
-        else:
-            return False
+    return False
+
+
+def proverca_new_user(log):
+    """Проверка логина, на его существование. Если данного еще не существует то "True"."""
+    con = connect("BadTriks_bd.sqlite")
+    cur = con.cursor()
+    result = [i[0] for i in cur.execute(f"""SELECT DISTINCT login FROM user ORDER BY rating DESC""").fetchall()]
+    con.close()
+    if log not in result:
+        return True
+    return False
+
+
+def new_user(log, pas, file):
+    """Добавление нового пользователя в БД"""
+    con = connect("BadTriks_bd.sqlite")
+    cur = con.cursor()
+    cur.execute(f"""INSERT INTO user(login,password, rating, progress) 
+                                    VALUES('{log}','{pas}', '0', '{file}') """)
+    con.commit()

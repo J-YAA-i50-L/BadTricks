@@ -13,8 +13,9 @@ STEP = 10
 signal_start = ''
 text_log = ''
 text_pas = ''
-name_info = ''
+name_info = 'info.txt'
 signal_auth = None
+camera_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -81,14 +82,16 @@ def music(type_music):  # Добавляем музыку в зависимом�
 
 def load_level(filename):
     filename = "data/" + filename
-    # читаем уровень, убирая символы перевода строки
+    # Читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
         level_map = [line for line in mapFile]
 
     return level_map
 
 
-def generate_level(level, tile): # генерациы уровня
+def generate_level(level, tile):  # Генерациы уровня
+    global camera_coords
+    camera_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '_':
@@ -105,11 +108,35 @@ def generate_level(level, tile): # генерациы уровня
                 tile('roof', x, y)
             elif level[y][x] == 'B':
                 tile('box', x, y)
+            elif level[y][x] == 'C':
+                tile('fon', x, y)
+                camera_coords.append([x, y])
 
 
-def read_progress(name):  # Чтение файла c прогресом
-    with open(f"progress/{name}", encoding="utf-8") as f:
+def info_camera():
+    return camera_coords
+
+
+def read_progress():  # Чтение файла c прогресом
+    print(name_info)
+    s = {4: 'fiz', 5: 'xim', 1: 'tex', 2: 'bio', 3: 'lit'}
+    znach = {'*': True, ' ': False}
+    with open(f"data/progress/{name_info}", encoding="utf-8") as f:
         read_data = f.read().split('\n')
+        if len(read_data) < 5:
+            for _ in range(5 - len(read_data)):
+                read_data.append('')
+        result = []
+        for i in read_data:
+            if len(i) < 3:
+                for _ in range(3 - len(i)):
+                    i += ' '
+            result.append([znach[j] for j in i])
+        read_data = result
+        slov = {}
+        for n, i in enumerate(read_data):
+            slov[s[n + 1]] = i
+        read_data = slov
     return read_data
 
 
@@ -117,3 +144,8 @@ def recording_progress(name):  # Запись прогреса в файл пр�
     with open(f"progress/{name}", "w") as f:
         print('***', file=f)
     # Пока не доделана до идеала
+
+
+def file_progress(name):
+    global name_info
+    name_info = name

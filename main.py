@@ -10,6 +10,7 @@ from Lvl1 import *
 from Pit import *
 from Timer import *
 from Stear import *
+from Camera import *
 
 
 def start_screen():
@@ -75,7 +76,9 @@ def authorization():  # Авторизация
                     signal_input(None)
                     return registration()  # Завершаем работу на авторизации и открываем стартовое окно
                 if signal_output() == 'run':
-                    pass
+                    screen.fill(pygame.Color(0, 0, 0))
+                    signal_input(None)
+                    return level_choice()
                 if signal_output() == 'not_run':
                     VerdictUsers(authorization_sprites)
         authorization_sprites.draw(screen)
@@ -87,10 +90,10 @@ def registration():  # Регистрация
     pygame.display.flip()
     fon = pygame.transform.scale(load_image('registration_user.png', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
-    PrintArea(reg_sprites, 'log')
-    PrintArea(reg_sprites, 'pas')
+    PrintArea(reg_sprites, 'log', 'reg')
+    PrintArea(reg_sprites, 'pas', 'reg')
     ExitСross(reg_sprites, 'back')
-    ButtonRun(reg_sprites)
+    ButtonRun(reg_sprites, 'reg')
     music('menu')
     while True:
         for event in pygame.event.get():
@@ -120,6 +123,7 @@ def top_users():  # Топ играков
     font = pygame.font.SysFont('arial', int(110 * (HEIGHT / 1381)))
     coord_x = 1000 * (WIDTH / 2648)
     coord_y = 360 * (HEIGHT / 1381)
+    music('menu')
     for line in top_str():
         string_rendered = font.render(line, 100, pygame.Color('black'))
         screen.blit(string_rendered, (coord_x, coord_y))
@@ -199,6 +203,10 @@ def lvl1():
     timer = Timer(level1_sprites)
     music('lvl1')
     Fon(level1_sprites)
+    print(info_camera())
+    for i in info_camera():
+        print(i[0], i[1])
+        Camera(level1_sprites, i[0], i[1])
     Number(level1_sprites, '0', 0)
     Stear(level1_sprites, 0, 0)
     while True:
@@ -216,6 +224,7 @@ def lvl1():
                 screen.fill(pygame.Color(0, 0, 0))
                 signal_input(None)
                 return level_choice()
+        level1_sprites.update()
         level1_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
