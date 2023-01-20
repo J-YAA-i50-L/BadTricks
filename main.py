@@ -10,6 +10,7 @@ from Lvl1 import *
 from Pit import *
 from Timer import *
 from Stear import *
+from Camera import *
 
 
 def start_screen():
@@ -202,6 +203,10 @@ def lvl1():
     timer = Timer(level1_sprites)
     music('lvl1')
     Fon(level1_sprites)
+    print(info_camera())
+    for i in info_camera():
+        print(i[0], i[1])
+        Camera(level1_sprites, i[0], i[1])
     Number(level1_sprites, '0', 0)
     Stear(level1_sprites, 0, 0)
     while True:
@@ -219,6 +224,7 @@ def lvl1():
                 screen.fill(pygame.Color(0, 0, 0))
                 signal_input(None)
                 return level_choice()
+        level1_sprites.update()
         level1_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

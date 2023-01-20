@@ -15,6 +15,7 @@ text_log = ''
 text_pas = ''
 name_info = 'info.txt'
 signal_auth = None
+camera_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -89,6 +90,8 @@ def load_level(filename):
 
 
 def generate_level(level, tile):  # Генерациы уровня
+    global camera_coords
+    camera_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '_':
@@ -105,6 +108,13 @@ def generate_level(level, tile):  # Генерациы уровня
                 tile('roof', x, y)
             elif level[y][x] == 'B':
                 tile('box', x, y)
+            elif level[y][x] == 'C':
+                tile('fon', x, y)
+                camera_coords.append([x, y])
+
+
+def info_camera():
+    return camera_coords
 
 
 def read_progress():  # Чтение файла c прогресом

@@ -1,19 +1,12 @@
 from GeneralFunctions import *
 import pygame
 from screeninfo import get_monitors
-pygame.init()
-pygame.key.set_repeat(200, 70)
-WIDTH = 300
-HEIGHT = 300
+
 file_camer = {0: 'Cam_0.png', 1: 'Cam_1.png', 2: 'Cam_2.png'}
-came = pygame.sprite.Group()
-FPS = 50
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-clock = pygame.time.Clock()
 
 
 class Camera(pygame.sprite.Sprite):
-    def __init__(self, group):
+    def __init__(self, group, x, y):
         super().__init__(group)
         self.tick = 0
         self.frames = []
@@ -24,15 +17,15 @@ class Camera(pygame.sprite.Sprite):
             self.frames.append(cam_image)
         self.image = self.frames[1]
         self.rect = self.image.get_rect()
-        self.rect.x = 100 * (WIDTH / 1700)
-        self.rect.y = 100 * (HEIGHT / 850)
+        self.rect.x = int(int(x) * (WIDTH / 1700) * 34)
+        self.rect.y = int(int(y) * (HEIGHT / 850) * 34)
         self.k = 0
         self.count = 0
         self.rmove = False
         self.lmove = False
         self.move = True
 
-    def update(self):
+    def update(self, *args):
         self.tick += 1
         self.animation()
 
@@ -63,11 +56,11 @@ class Camera(pygame.sprite.Sprite):
 
 
 
-Camera(came)
-while True:
-    came.update()
-    screen.fill(pygame.Color(0, 0, 0))
-    came.draw(screen)
-    pygame.display.flip()
-
-    clock.tick(FPS)
+# Camera(came)
+# while True:
+#     came.update()
+#     screen.fill(pygame.Color(0, 0, 0))
+#     came.draw(screen)
+#     pygame.display.flip()
+#
+#     clock.tick(FPS)

@@ -1,52 +1,33 @@
-import sys
-
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QCheckBox, QPlainTextEdit, QLineEdit
+import pygame
 
 
-class Main(QWidget):
-    def init(self):
-        super().init()
-        self.initUI()
-
-    def initUI(self):
-        self.setGeometry(300, 300, 500, 500)
-        self.setWindowTitle('Заказ в Макдональдсе')
-
-        self.txt = QPlainTextEdit('Ваш заказ:\n', self)
-        self.txt.move(10, 120)
-        self.txt.setEnabled(False)
-
-        self.cb1 = QCheckBox('Чизбургер', self)
-        self.cb1.move(10, 10)
-
-        self.cb2 = QCheckBox('Гамбургер', self)
-        self.cb2.move(10, 30)
-
-        self.cb3 = QCheckBox('Кока-кола', self)
-        self.cb3.move(10, 50)
-
-        self.cb4 = QCheckBox('Нагетсы', self)
-        self.cb4.move(10, 70)
-
-        self.btn = QPushButton('Заказать', self)
-        self.btn.adjustSize()
-        self.btn.move(10, 90)
-        self.btn.clicked.connect(self.zakaz)
-
-    def zakaz(self):
-        self.txt.setPlainText('')
-        if self.cb1.isChecked():
-            self.txt.setPlainText(self.txt.toPlainText() + 'Чизбургер' + '\n')
-        if self.cb2.isChecked():
-            self.txt.setPlainText(self.txt.toPlainText() + 'Гамбургер' + '\n')
-        if self.cb3.isChecked():
-            self.txt.setPlainText(self.txt.toPlainText() + 'Кока-кола' + '\n')
-        if self.cb4.isChecked():
-            self.txt.setPlainText(self.txt.toPlainText() + 'Нагетсы' + '\n')
+def draw(count):
+    global size
+    k = 300 // (count * 2)
+    x1 = 0
+    y1 = 0
+    h = 300
+    w = 300
+    for i in range(count):
+        pygame.draw.ellipse(screen, (255, 255, 255), (x1, y1, h, w), -2)
+        pygame.draw.ellipse(screen, (255, 255, 255), (y1, x1, w, h), 1)
+        y1 += k
+        w -= 2 * k
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    main = Main()
-    main.show()
-    sys.exit(app.exec())
+n = input()
+f = True
+if n in '.':
+    print("Неправильный формат ввода")
+    f = False
+
+if __name__ == '__main__' and f:
+    pygame.init()
+    pygame.display.set_caption('Сфера')
+    size = width, height = 300, 300
+    screen = pygame.display.set_mode(size)
+    screen.fill(pygame.Color('black'))
+    draw(int(n))
+    while pygame.event.wait().type != pygame.QUIT:
+        pygame.display.flip()
+    pygame.quit()
