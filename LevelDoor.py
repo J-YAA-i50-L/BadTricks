@@ -1,7 +1,7 @@
 from GeneralFunctions import *
 
 
-class LevelDoor(pygame.sprite.Sprite): # дверь для выбора уровня
+class LevelDoor(pygame.sprite.Sprite):  # дверь для выбора уровня
     # Открываем изображение и маштабируем
     door = load_image("Door0.png", cat='Door')
     door_image = pygame.transform.scale(door, (door.get_width() * 0.25 * (WIDTH / 1280),
@@ -17,7 +17,11 @@ class LevelDoor(pygame.sprite.Sprite): # дверь для выбора уров
         super().__init__(group)
         self.predmet = predmet
         spicok = read_progress()
-        if spicok[self.predmet] == [False, False, False] and self.predmet != 'tex':
+        for i in spicok:
+            if spicok[i] == [False, False, False]:
+                com = i
+                break
+        if spicok[self.predmet] == [False, False, False] and self.predmet != 'tex' and self.predmet != com:
             self.image = LevelDoor.bloc_door_image
             self.flag = False
         else:
