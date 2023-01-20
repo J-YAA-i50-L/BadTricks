@@ -8,6 +8,8 @@ from Door import *
 from Star import *
 from Lvl1 import *
 from Pit import *
+from Timer import *
+from Stear import *
 
 
 def start_screen():
@@ -194,12 +196,18 @@ def level_choice():  # Выбор уровня
 
 def lvl1():
     generate_level(load_level('test_lvl.txt'), Tile1)
+    Timer(level1_sprites)
     ExitСross(level1_sprites, 'back')
     pit = Pit(level1_sprites, 500, 102)
+    timer = Timer(level1_sprites)
     music('lvl1')
+    Fon(level1_sprites)
+    Number(level1_sprites, '0', 0)
+    Stear(level1_sprites, 0, 0)
     while True:
         screen.fill((0, 0, 0))
         pit.animation()
+        timer.update_time()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
