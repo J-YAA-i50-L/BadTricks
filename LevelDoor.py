@@ -21,7 +21,7 @@ class LevelDoor(pygame.sprite.Sprite):  # дверь для выбора уро�
             if spicok[i] == [False, False, False]:
                 com = i
                 break
-        if spicok[self.predmet] == [False, False, False] and self.predmet != 'tex' and self.predmet != com:
+        if spicok[self.predmet] == [False, False, False] and self.predmet != com:
             self.image = LevelDoor.bloc_door_image
             self.flag = False
         else:
