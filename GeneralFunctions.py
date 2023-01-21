@@ -120,6 +120,13 @@ def generate_level(level, tile):  # Генерациы уровня
                 rove_coords.append([x, y])
             elif level[y][x] == 'D':  # Дверь в стене
                 tile('WallDoor', x, y)
+            elif level[y][x] == 'p':
+                tile('pedestal', x, y)
+            elif level[y][x] == 't':
+                tile('table', x, y)
+            elif level[y][x] == 'b':
+                tile('box_book', x, y)
+
 
 def info_subject():
     return camera_coords, rove_coords
