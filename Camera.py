@@ -30,7 +30,7 @@ class Camera(pygame.sprite.Sprite):
         self.animation()
 
     def animation(self):
-        if self.tick % 750 == 0 and self.k != 20 or self.move:
+        if self.tick % 300 == 0 and self.k != 20 or self.move:
             self.image = self.frames[1]
             if self.k == 20:
                 self.count += 1
@@ -53,14 +53,3 @@ class Camera(pygame.sprite.Sprite):
         elif self.lmove:
             self.k = 0
             self.image = self.frames[0]
-
-
-
-# Camera(came)
-# while True:
-#     came.update()
-#     screen.fill(pygame.Color(0, 0, 0))
-#     came.draw(screen)
-#     pygame.display.flip()
-#
-#     clock.tick(FPS)

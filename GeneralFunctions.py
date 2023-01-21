@@ -16,6 +16,7 @@ text_pas = ''
 name_info = 'info.txt'
 signal_auth = None
 camera_coords = []
+rove_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -25,6 +26,8 @@ reg_sprites = pygame.sprite.Group()
 level_choice_sprites = pygame.sprite.Group()
 level1_sprites = pygame.sprite.Group()
 timer_sprites = pygame.sprite.Group()
+camera_sprites = pygame.sprite.Group()
+rove_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
 menu_music = False
 lvl1_music = False
@@ -90,8 +93,9 @@ def load_level(filename):
 
 
 def generate_level(level, tile):  # Генерациы уровня
-    global camera_coords
+    global camera_coords, rove_coords
     camera_coords = []
+    rove_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '_':
@@ -108,13 +112,17 @@ def generate_level(level, tile):  # Генерациы уровня
                 tile('roof', x, y)
             elif level[y][x] == 'B':
                 tile('box', x, y)
-            elif level[y][x] == 'C':
+            elif level[y][x] == 'C':  # Камера
                 tile('fon', x, y)
                 camera_coords.append([x, y])
+            elif level[y][x] == 'R':  # Лестница Металическая(300р.)
+                tile('floor', x, y)
+                rove_coords.append([x, y])
+            elif level[y][x] == 'D':  # Дверь в стене
+                tile('WallDoor', x, y)
 
-
-def info_camera():
-    return camera_coords
+def info_subject():
+    return camera_coords, rove_coords
 
 
 def read_progress():  # Чтение файла c прогресом

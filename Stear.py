@@ -9,5 +9,5 @@ class Stear(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(Stear.image, (Stear.image.get_width() * 2 * (WIDTH / 1700),
                                                           Stear.image.get_height() * 2 * (HEIGHT / 850)))
         self.rect = self.image.get_rect()
-        self.rect.x = x * (WIDTH / 1700)
-        self.rect.y = y * (HEIGHT / 850)
+        self.rect.x = x * (WIDTH / 1700) * 34
+        self.rect.y = y * (HEIGHT / 850) * 34 + 22
