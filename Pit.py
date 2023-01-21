@@ -22,15 +22,13 @@ class Pit(pygame.sprite.Sprite):
 
     def update(self, *args):
         if args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_RIGHT:
-            if self.rect.right <= WIDTH - (34 * WIDTH / 1700):
-                self.rmove = True
-                self.lmove = False
-                self.rect = self.rect.move(5, 0)
+            self.rmove = True
+            self.lmove = False
+            self.rect = self.rect.move(5, 0)
         elif args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_LEFT:
-            if self.rect.left >= 0:
-                self.rmove = False
-                self.lmove = True
-                self.rect = self.rect.move(-5, 0)
+            self.rmove = False
+            self.lmove = True
+            self.rect = self.rect.move(-5, 0)
         else:
             self.rmove = False
             self.lmove = False
