@@ -13,8 +13,8 @@ class Pit(pygame.sprite.Sprite):
         self.image = self.frames[0]
         self.rect = self.image.get_rect()
         # Координаты левого верхнего угла с учетом размера экранна
-        self.rect.x = x * (WIDTH / 1700)
-        self.rect.y = y * (HEIGHT / 850)
+        self.rect.x = x * (WIDTH / 1700) * 34
+        self.rect.y = y * (HEIGHT / 850) * 34
         self.stop_counter = 0
         self.move_counter = 0
         self.rmove = False
