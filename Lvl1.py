@@ -12,7 +12,8 @@ tile_images = {'floor': load_image('Floor0.png', cat='Tex'),
                'WallDoor': load_image('Wall_Door0.png', cat='Tex'),
                'table': load_image('Table.png', cat='Tex'),
                'pedestal': load_image('Pedestal.png', cat='Tex'),
-               'box_book': load_image('box_book.png', cat='Tex')}
+               'box_book': load_image('box_book.png', cat='Tex'),
+               'pk': load_image('pk.png', cat='Tex')}
 
 
 class Tile1(pygame.sprite.Sprite):  # отрисовка уровня
