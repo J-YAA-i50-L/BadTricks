@@ -18,6 +18,7 @@ signal_auth = None
 camera_coords = []
 rove_coords = []
 user_coords = []
+journal_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -94,10 +95,11 @@ def load_level(filename):
 
 
 def generate_level(level, tile):  # Генерациы уровня
-    global camera_coords, rove_coords, user_coords
+    global camera_coords, rove_coords, user_coords, journal_coords
     camera_coords = []
     rove_coords = []
     user_coords = []
+    journal_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '_':
@@ -133,10 +135,15 @@ def generate_level(level, tile):  # Генерациы уровня
                 tile('box_book', x, y)
             elif level[y][x] == 'P':
                 tile('pk', x, y)
+            elif level[y][x] == 'y':
+                tile('fon_dock', x, y)
+            elif level[y][x] == 'G':
+                tile('fon_dock', x, y)
+                journal_coords.append([x, y])
 
 
 def info_subject():
-    return camera_coords, rove_coords, user_coords
+    return camera_coords, rove_coords, journal_coords, user_coords
 
 
 def read_progress():  # Чтение файла c прогресом
