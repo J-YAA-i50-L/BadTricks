@@ -11,6 +11,7 @@ from Pit import *
 from Timer import *
 from Stear import *
 from Camera import *
+from Journal import *
 
 
 def start_screen():
@@ -199,6 +200,8 @@ def lvl1():
     generate_level(load_level('test_lvl.txt'), Tile1)
     Timer(level1_sprites)
     ExitСross(level1_sprites, 'back')
+    info = info_subject()
+    journal = Journal(level1_sprites, info[-2][0][0], info[-2][0][1])
     timer = Timer(level1_sprites)
     music('lvl1')
     info = info_subject()
@@ -207,7 +210,7 @@ def lvl1():
     for j in info[1]:
         Stear(level1_sprites, j[0], j[1])
     Number(level1_sprites, '0', 0)
-    pit = Pit(level1_sprites, 500, 102)
+    pit = Pit(level1_sprites, info[-1][0][0], info[-1][0][1])
     while True:
         screen.fill((0, 0, 0))
         pit.animation()
