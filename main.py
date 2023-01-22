@@ -195,14 +195,14 @@ def level_choice():  # Выбор уровня
         clock.tick(FPS)
 
 
-def lvl1():
+def lvl1():  # Посути это все уровни вместе взятые
     generate_level(load_level('test_lvl.txt'), Tile1)
     Timer(level1_sprites)
     ExitСross(level1_sprites, 'back')
-    pit = Pit(level1_sprites, 500, 102)
+    info = info_subject()
+    pit = Pit(level1_sprites, info[-1][0][0], info[-1][0][1])
     timer = Timer(level1_sprites)
     music('lvl1')
-    info = info_subject()
     for j in info[0]:
         Camera(camera_sprites, j[0], j[1])
     for j in info[1]:

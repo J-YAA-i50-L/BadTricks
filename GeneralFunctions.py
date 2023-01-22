@@ -17,6 +17,7 @@ name_info = 'info.txt'
 signal_auth = None
 camera_coords = []
 rove_coords = []
+user_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -93,9 +94,10 @@ def load_level(filename):
 
 
 def generate_level(level, tile):  # Генерациы уровня
-    global camera_coords, rove_coords
+    global camera_coords, rove_coords, user_coords
     camera_coords = []
     rove_coords = []
+    user_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '_':
@@ -108,6 +110,9 @@ def generate_level(level, tile):  # Генерациы уровня
                 tile('window', x, y)
             elif level[y][x] == ' ':
                 tile('sky', x, y)
+            elif level[y][x] == '@':  # Спавн игрока
+                tile('sky', x, y)
+                user_coords.append([x, y])
             elif level[y][x] == '#':
                 tile('roof', x, y)
             elif level[y][x] == 'B':
@@ -120,9 +125,18 @@ def generate_level(level, tile):  # Генерациы уровня
                 rove_coords.append([x, y])
             elif level[y][x] == 'D':  # Дверь в стене
                 tile('WallDoor', x, y)
+            elif level[y][x] == 'p':
+                tile('pedestal', x, y)
+            elif level[y][x] == 't':
+                tile('table', x, y)
+            elif level[y][x] == 'b':
+                tile('box_book', x, y)
+            elif level[y][x] == 'P':
+                tile('pk', x, y)
+
 
 def info_subject():
-    return camera_coords, rove_coords
+    return camera_coords, rove_coords, user_coords
 
 
 def read_progress():  # Чтение файла c прогресом
