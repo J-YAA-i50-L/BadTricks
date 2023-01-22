@@ -17,6 +17,7 @@ name_info = 'info.txt'
 signal_auth = None
 camera_coords = []
 rove_coords = []
+wall_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -27,7 +28,6 @@ level_choice_sprites = pygame.sprite.Group()
 level1_sprites = pygame.sprite.Group()
 timer_sprites = pygame.sprite.Group()
 camera_sprites = pygame.sprite.Group()
-rove_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
 menu_music = False
 lvl1_music = False
@@ -96,12 +96,16 @@ def generate_level(level, tile):  # Генерациы уровня
     global camera_coords, rove_coords
     camera_coords = []
     rove_coords = []
+    wall_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '_':
                 tile('floor', x, y)
             elif level[y][x] == '|':
                 tile('wall', x, y)
+            elif level[y][x] == 'W':
+                tile('wall', x, y)
+                wall_coords.append([x, y])
             elif level[y][x] == '.':
                 tile('fon', x, y)
             elif level[y][x] == '0':
@@ -121,8 +125,9 @@ def generate_level(level, tile):  # Генерациы уровня
             elif level[y][x] == 'D':  # Дверь в стене
                 tile('WallDoor', x, y)
 
+
 def info_subject():
-    return camera_coords, rove_coords
+    return camera_coords, rove_coords, wall_coords
 
 
 def read_progress():  # Чтение файла c прогресом
