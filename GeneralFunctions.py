@@ -19,6 +19,7 @@ camera_coords = []
 rove_coords = []
 user_coords = []
 journal_coords = []
+wall_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -143,7 +144,7 @@ def generate_level(level, tile):  # Генерациы уровня
 
 
 def info_subject():
-    return camera_coords, rove_coords, journal_coords, user_coords
+    return camera_coords, rove_coords, wall_coords, journal_coords, user_coords
 
 
 def read_progress():  # Чтение файла c прогресом

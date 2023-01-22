@@ -196,7 +196,7 @@ def level_choice():  # Выбор уровня
         clock.tick(FPS)
 
 
-def lvl1():  # Посути это все уровни вместе взятые
+def lvl1():
     generate_level(load_level('test_lvl.txt'), Tile1)
     Timer(level1_sprites)
     ExitСross(level1_sprites, 'back')
@@ -205,11 +205,13 @@ def lvl1():  # Посути это все уровни вместе взятые
     journal = Journal(level1_sprites, info[-2][0][0], info[-2][0][1])
     timer = Timer(level1_sprites)
     music('lvl1')
+    info = info_subject()
     for j in info[0]:
         Camera(camera_sprites, j[0], j[1])
     for j in info[1]:
-        Stear(rove_sprites, j[0], j[1])
+        Stear(level1_sprites, j[0], j[1])
     Number(level1_sprites, '0', 0)
+    pit = Pit(level1_sprites, 500, 102)
     while True:
         screen.fill((0, 0, 0))
         pit.animation()
@@ -227,7 +229,6 @@ def lvl1():  # Посути это все уровни вместе взятые
                 return level_choice()
         camera_sprites.update()
         level1_sprites.draw(screen)
-        rove_sprites.draw(screen)
         camera_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
