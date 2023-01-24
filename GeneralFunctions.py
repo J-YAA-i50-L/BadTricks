@@ -148,7 +148,6 @@ def info_subject():
 
 
 def read_progress():  # Чтение файла c прогресом
-    print(name_info)
     s = {4: 'fiz', 5: 'xim', 1: 'tex', 2: 'bio', 3: 'lit'}
     znach = {'*': True, ' ': False}
     with open(f"data/progress/{name_info}", encoding="utf-8") as f:
