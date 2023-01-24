@@ -1,3 +1,5 @@
+import time
+
 from GeneralFunctions import *
 
 
@@ -15,6 +17,7 @@ class Pit(pygame.sprite.Sprite):
         # Координаты левого верхнего угла с учетом размера экранна
         self.rect.x = x * (WIDTH / 1700) * 34
         self.rect.y = y * (HEIGHT / 850) * 34
+        self.group = group
         self.stop_counter = 0
         self.move_counter = 0
         self.rmove = False
@@ -35,6 +38,7 @@ class Pit(pygame.sprite.Sprite):
                     self.rmove = False
                     self.lmove = False
                     self.umove = False
+                    self.journal = False
         elif args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_UP:
             for coord in info_subject()[1]:
                 if (self.rect.left + 30 >= coord[0] * 34 * WIDTH // 1700
@@ -46,13 +50,16 @@ class Pit(pygame.sprite.Sprite):
                     self.rmove = False
                     self.lmove = False
                     self.dmove = False
+                    self.journal = False
         elif args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_RIGHT and not self.dmove and not self.umove:
             self.rmove = True
             self.lmove = False
+            self.journal = False
             self.rect = self.rect.move(10, 0)
         elif args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_LEFT and not self.dmove and not self.umove:
             self.rmove = False
             self.lmove = True
+            self.journal = False
             self.rect = self.rect.move(-10, 0)
 
         else:
@@ -106,3 +113,8 @@ class Pit(pygame.sprite.Sprite):
                 self.image = self.frames[1]
             else:
                 self.image = self.frames[0]
+
+    def end(self):
+        self.image = self.frames[11]
+        ruchka_sound.play()
+

@@ -1,3 +1,7 @@
+import time
+
+import pygame.sprite
+
 from Door import *
 from User import *
 from ExitCross import *
@@ -12,6 +16,7 @@ from Timer import *
 from Stear import *
 from Camera import *
 from Journal import *
+from Robot import *
 
 
 def start_screen():
@@ -206,14 +211,13 @@ def lvl1():
     music('lvl1')
     info = info_subject()
     for j in info[0]:
-        Camera(camera_sprites, j[0], j[1])
+        Camera(npc_sprites, j[0], j[1])
     for j in info[1]:
         Stear(level1_sprites, j[0], j[1])
     Number(level1_sprites, '0', 0)
     pit = Pit(level1_sprites, info[-1][0][0], info[-1][0][1])
     while True:
         screen.fill((0, 0, 0))
-        pit.animation()
         timer.update_time()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -226,9 +230,22 @@ def lvl1():
                 screen.fill(pygame.Color(0, 0, 0))
                 signal_input(None)
                 return level_choice()
-        camera_sprites.update()
+        if pygame.sprite.collide_rect(pit, journal):
+            pit.end()
+            level1_sprites.draw(screen)
+            npc_sprites.draw(screen)
+            pygame.display.flip()
+            time.sleep(3)
+            win_sound.play()
+            all_time = timer.get_time()
+            # тут нужно сделать запись сохранения в файл в зависимости от all_time
+            screen.fill(pygame.Color(0, 0, 0))
+            return level_choice()
+        else:
+            pit.animation()
+        npc_sprites.update()
         level1_sprites.draw(screen)
-        camera_sprites.draw(screen)
+        npc_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 

@@ -2,6 +2,7 @@ import os
 import sys
 import pygame
 from screeninfo import get_monitors
+import time
 pygame.init()
 pygame.key.set_repeat(200, 70)
 # Разрешение экрана
@@ -20,6 +21,7 @@ rove_coords = []
 wall_coords = []
 user_coords = []
 journal_coords = []
+door_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -29,8 +31,10 @@ reg_sprites = pygame.sprite.Group()
 level_choice_sprites = pygame.sprite.Group()
 level1_sprites = pygame.sprite.Group()
 timer_sprites = pygame.sprite.Group()
-camera_sprites = pygame.sprite.Group()
+npc_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
+ruchka_sound = pygame.mixer.Sound('Music/ruchka.wav')
+win_sound = pygame.mixer.Sound('Music/win.wav')
 menu_music = False
 lvl1_music = False
 
@@ -95,12 +99,13 @@ def load_level(filename):
 
 
 def generate_level(level, tile):  # Генерациы уровня
-    global camera_coords, rove_coords, user_coords, journal_coords, wall_coords
+    global camera_coords, rove_coords, user_coords, journal_coords, wall_coords, door_coords
     camera_coords = []
     rove_coords = []
     user_coords = []
     journalcoords = []
     wall_coords = []
+    door_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '_':
@@ -128,6 +133,7 @@ def generate_level(level, tile):  # Генерациы уровня
                 rove_coords.append([x, y])
             elif level[y][x] == 'D':  # Дверь в стене
                 tile('WallDoor', x, y)
+                door_coords.append([x, y])
             elif level[y][x] == 'p':
                 tile('pedestal', x, y)
             elif level[y][x] == 't':
@@ -146,9 +152,12 @@ def generate_level(level, tile):  # Генерациы уровня
                 wall_coords.append([x, y])
 
 
-
 def info_subject():
     return camera_coords, rove_coords, wall_coords, journal_coords, user_coords
+
+
+def door_info():
+    return door_coords
 
 
 def read_progress():  # Чтение файла c прогресом
