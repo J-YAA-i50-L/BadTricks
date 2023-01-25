@@ -236,7 +236,7 @@ def lvl():
                 return level_choice()
         if pygame.sprite.collide_rect(pit, journal):
             pit.end()
-            level1_sprites.draw(screen)
+            level_sprites.draw(screen)
             npc_sprites.draw(screen)
             pygame.display.flip()
             time.sleep(3)
@@ -248,7 +248,7 @@ def lvl():
         else:
             pit.animation()
         npc_sprites.update()
-        level1_sprites.draw(screen)
+        level_sprites.draw(screen)
         npc_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

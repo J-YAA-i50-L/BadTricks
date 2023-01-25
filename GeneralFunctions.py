@@ -29,7 +29,7 @@ authorization_sprites = pygame.sprite.Group()
 top_sprites = pygame.sprite.Group()
 reg_sprites = pygame.sprite.Group()
 level_choice_sprites = pygame.sprite.Group()
-level1_sprites = pygame.sprite.Group()
+level_sprites = pygame.sprite.Group()
 timer_sprites = pygame.sprite.Group()
 npc_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
@@ -46,7 +46,6 @@ def load_image(name, color_key=None, cat='data'):
     except pygame.error as message:
         print('Cannot load image:', name)
         raise SystemExit(message)
-
     if color_key is not None:
         image.convert()
         if color_key == -1:
@@ -125,7 +124,7 @@ def generate_level(level, tile):  # Генерациы уровня
             elif level[y][x] == 'D':  # Дверь в стене
                 tile('WallDoor', x, y)
             elif level[y][x] == 'G':
-                tile('fon_dock', x, y)
+                tile(s[level[y][x + 1]], x, y)
                 journal_coords.append([x, y])
             elif level[y][x] == '|':
                 tile('wall', x, y)
@@ -144,7 +143,6 @@ def door_info():
 
 
 def read_progress():  # Чтение файла c прогресом
-    print(name_info)
     s = {4: 'fiz', 5: 'xim', 1: 'tex', 2: 'bio', 3: 'lit'}
     znach = {'*': True, ' ': False}
     with open(f"data/progress/{name_info}", encoding="utf-8") as f:
@@ -166,12 +164,18 @@ def read_progress():  # Чтение файла c прогресом
     return read_data
 
 
-def recording_progress(name):  # Запись прогреса в файл прогерсса
-    with open(f"progress/{name}", "w") as f:
-        print('***', file=f)
-    # Пока не доделана до идеала
+def recording_progress(data):  # Запись прогреса в файл прогерсса
+    with open(f"data/progress/{name_info}", 'r+') as f:
+        read_data = f.read().split('\n')
+        f.truncate(0)
+    with open(f"data/progress/{name_info}", "w") as f:
+        for i in read_data[:-1]:
+            print(i, file=f)
+        print(data, file=f)
 
 
 def file_progress(name):
     global name_info
     name_info = name
+
+recording_progress('111')
