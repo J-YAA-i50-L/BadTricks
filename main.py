@@ -230,6 +230,8 @@ def lvl1():
                 screen.fill(pygame.Color(0, 0, 0))
                 signal_input(None)
                 return level_choice()
+            if pygame.sprite.spritecollide(pit, npc_sprites, False):
+                print('collide')
         if pygame.sprite.collide_rect(pit, journal):
             pit.end()
             level1_sprites.draw(screen)
