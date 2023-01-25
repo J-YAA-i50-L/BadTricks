@@ -47,3 +47,11 @@ class LevelDoor(pygame.sprite.Sprite):  # дверь для выбора уро�
             if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
                 if self.predmet == 'tex':
                     signal_input('lvl1')
+                elif self.predmet == 'bio':
+                    signal_input('lvl2')
+                elif self.predmet == 'lit':
+                    signal_input('lvl3')
+                elif self.predmet == 'fiz':
+                    signal_input('lvl4')
+                elif self.predmet == 'xim':
+                    signal_input('lvl5')

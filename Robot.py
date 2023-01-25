@@ -34,3 +34,4 @@ class Robot(pygame.sprite.Sprite):
             self.rect = self.rect.move(1, 0)
         elif self.lmove:
             self.rect = self.rect.move(-1, 0)
+            self.rect = self.rect.move(-1, 0)
