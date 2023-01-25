@@ -17,6 +17,7 @@ from Stear import *
 from Camera import *
 from Journal import *
 from Robot import *
+name_level = ''
 
 
 def start_screen():
@@ -153,6 +154,7 @@ def top_users():  # Топ играков
 
 
 def level_choice():  # Выбор уровня
+    global name_level
     ExitСross(level_choice_sprites, 'back')  # Выход
     # Каждая дверь отдельно
     LevelDoor(level_choice_sprites, 250, 40, 'fiz')
@@ -188,34 +190,36 @@ def level_choice():  # Выбор уровня
                     terminate()
             if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
                 level_choice_sprites.update(event)
+                name_level = signal_output()
                 if signal_output() == 'exit':
                     screen.fill(pygame.Color(0, 0, 0))
                     signal_input(None)
                     return start_screen()  # Завершаем работу выбора уровня и открываем стартовое окно
-                elif signal_output() == 'lvl1':
+                elif name_level != None and 'lvl' == name_level[:3]:
                     screen.fill(pygame.Color(0, 0, 0))
                     signal_input(None)
-                    return lvl1()  # Завершаем работу выбора уровня и открываем первый уровень
+                    return lvl()  # Завершаем работу выбора уровня и открываем первый уровень
         level_choice_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
 
-def lvl1():
-    generate_level(load_level('test_lvl.txt'), Tile1)
-    Timer(level1_sprites)
-    ExitСross(level1_sprites, 'back')
+def lvl():
+    print(name_level)
+    generate_level(load_level(f'{name_level}.txt'), Tile1)
+    Timer(level_sprites)
+    ExitСross(level_sprites, 'back')
     info = info_subject()
-    journal = Journal(level1_sprites, info[-2][0][0], info[-2][0][1])
-    timer = Timer(level1_sprites)
+    journal = Journal(level_sprites, info[-2][0][0], info[-2][0][1])
+    timer = Timer(level_sprites)
     music('lvl1')
     info = info_subject()
     for j in info[0]:
         Camera(npc_sprites, j[0], j[1])
     for j in info[1]:
-        Stear(level1_sprites, j[0], j[1])
-    Number(level1_sprites, '0', 0)
-    pit = Pit(level1_sprites, info[-1][0][0], info[-1][0][1])
+        Stear(level_sprites, j[0], j[1])
+    Number(level_sprites, '0', 0)
+    pit = Pit(level_sprites, info[-1][0][0], info[-1][0][1])
     while True:
         screen.fill((0, 0, 0))
         timer.update_time()
@@ -225,7 +229,7 @@ def lvl1():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     terminate()
-            level1_sprites.update(event)
+            level_sprites.update(event)
             if signal_output() == 'exit':
                 screen.fill(pygame.Color(0, 0, 0))
                 signal_input(None)

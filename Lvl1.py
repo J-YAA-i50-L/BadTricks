@@ -19,8 +19,7 @@ tile_images = {'floor': load_image('Floor0.png', cat='Tex'),
 
 class Tile1(pygame.sprite.Sprite):  # отрисовка уровня
     def __init__(self, tile_type, pos_x, pos_y):
-        print(1)
-        super().__init__(level1_sprites)
+        super().__init__(level_sprites)
         floor = tile_images[tile_type]
         self.image = pygame.transform.scale(floor, (floor.get_width() * (WIDTH / 1700) + 1,
                                             floor.get_height() * (HEIGHT / 850) + 1))

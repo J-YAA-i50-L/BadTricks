@@ -94,32 +94,23 @@ def load_level(filename):
     # Читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
         level_map = [line for line in mapFile]
-
     return level_map
 
 
 def generate_level(level, tile):  # Генерациы уровня
+    s = {'.': 'fon', ' ': 'sky', '_': 'floor', '|': 'wall',
+         '0': 'window', '#': 'roof', 'B': 'box', 'y': 'fon_dock',
+         'P': 'pk', 'b': 'box_book', 't': 'table', 'p': 'pedestal'}
     global camera_coords, rove_coords, user_coords, journal_coords, wall_coords, door_coords
     camera_coords = []
     rove_coords = []
     user_coords = []
-    journalcoords = []
+    journal_coords = []
     wall_coords = []
-    door_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
-            if level[y][x] == '_':
-                tile('floor', x, y)
-            elif level[y][x] == '|':
-                tile('wall', x, y)
-            elif level[y][x] == '.':
-                tile('fon', x, y)
-            elif level[y][x] == '0':
-                tile('window', x, y)
-            elif level[y][x] == ' ':
-                tile('sky', x, y)
-            elif level[y][x] == '@':  # Спавн игрока
-                tile('sky', x, y)
+            if level[y][x] == '@':  # Спавн игрока
+                tile(s[level[y][x + 1]], x, y)
                 user_coords.append([x, y])
             elif level[y][x] == '#':
                 tile('roof', x, y)
@@ -133,23 +124,15 @@ def generate_level(level, tile):  # Генерациы уровня
                 rove_coords.append([x, y])
             elif level[y][x] == 'D':  # Дверь в стене
                 tile('WallDoor', x, y)
-                door_coords.append([x, y])
-            elif level[y][x] == 'p':
-                tile('pedestal', x, y)
-            elif level[y][x] == 't':
-                tile('table', x, y)
-            elif level[y][x] == 'b':
-                tile('box_book', x, y)
-            elif level[y][x] == 'P':
-                tile('pk', x, y)
-            elif level[y][x] == 'y':
-                tile('fon_dock', x, y)
             elif level[y][x] == 'G':
                 tile('fon_dock', x, y)
                 journal_coords.append([x, y])
             elif level[y][x] == '|':
                 tile('wall', x, y)
                 wall_coords.append([x, y])
+            else:
+                if level[y][x] != '\n':
+                    tile(s[level[y][x]], x, y)
 
 
 def info_subject():
