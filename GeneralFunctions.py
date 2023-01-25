@@ -99,7 +99,8 @@ def load_level(filename):
 def generate_level(level, tile):  # Генерациы уровня
     s = {'.': 'fon', ' ': 'sky', '_': 'floor', '|': 'wall',
          '0': 'window', '#': 'roof', 'B': 'box', 'y': 'fon_dock',
-         'P': 'pk', 'b': 'box_book', 't': 'table', 'p': 'pedestal'}
+         'P': 'pk', 'b': 'box_book', 't': 'table', 'p': 'pedestal',
+         ',': 'fon_bio'}
     global camera_coords, rove_coords, user_coords, journal_coords, wall_coords, door_coords
     camera_coords = []
     rove_coords = []
@@ -116,7 +117,7 @@ def generate_level(level, tile):  # Генерациы уровня
             elif level[y][x] == 'B':
                 tile('box', x, y)
             elif level[y][x] == 'C':  # Камера
-                tile('fon', x, y)
+                tile(s[level[y][x + 1]], x, y)
                 camera_coords.append([x, y])
             elif level[y][x] == 'R':  # Лестница Металическая(300р.)
                 tile('floor', x, y)
@@ -177,5 +178,3 @@ def recording_progress(data):  # Запись прогреса в файл пр�
 def file_progress(name):
     global name_info
     name_info = name
-
-recording_progress('111')
