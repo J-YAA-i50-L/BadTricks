@@ -2,6 +2,7 @@ import os
 import sys
 import pygame
 from screeninfo import get_monitors
+import time
 pygame.init()
 pygame.key.set_repeat(200, 70)
 # Разрешение экрана
@@ -17,7 +18,10 @@ name_info = 'info.txt'
 signal_auth = None
 camera_coords = []
 rove_coords = []
+wall_coords = []
 user_coords = []
+journal_coords = []
+door_coords = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 meny_sprites = pygame.sprite.Group()
@@ -25,11 +29,12 @@ authorization_sprites = pygame.sprite.Group()
 top_sprites = pygame.sprite.Group()
 reg_sprites = pygame.sprite.Group()
 level_choice_sprites = pygame.sprite.Group()
-level1_sprites = pygame.sprite.Group()
+level_sprites = pygame.sprite.Group()
 timer_sprites = pygame.sprite.Group()
-camera_sprites = pygame.sprite.Group()
-rove_sprites = pygame.sprite.Group()
+npc_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
+ruchka_sound = pygame.mixer.Sound('Music/ruchka.wav')
+win_sound = pygame.mixer.Sound('Music/win.wav')
 menu_music = False
 lvl1_music = False
 
@@ -41,7 +46,6 @@ def load_image(name, color_key=None, cat='data'):
     except pygame.error as message:
         print('Cannot load image:', name)
         raise SystemExit(message)
-
     if color_key is not None:
         image.convert()
         if color_key == -1:
@@ -89,58 +93,57 @@ def load_level(filename):
     # Читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
         level_map = [line for line in mapFile]
-
     return level_map
 
 
 def generate_level(level, tile):  # Генерациы уровня
-    global camera_coords, rove_coords, user_coords
+    s = {'.': 'fon', ' ': 'sky', '_': 'floor', '|': 'wall',
+         '0': 'window', '#': 'roof', 'B': 'box', 'y': 'fon_dock',
+         'P': 'pk', 'b': 'box_book', 't': 'table', 'p': 'pedestal',
+         ',': 'fon_bio'}
+    global camera_coords, rove_coords, user_coords, journal_coords, wall_coords, door_coords
     camera_coords = []
     rove_coords = []
     user_coords = []
+    journal_coords = []
+    wall_coords = []
     for y in range(len(level)):
         for x in range(len(level[y])):
-            if level[y][x] == '_':
-                tile('floor', x, y)
-            elif level[y][x] == '|':
-                tile('wall', x, y)
-            elif level[y][x] == '.':
-                tile('fon', x, y)
-            elif level[y][x] == '0':
-                tile('window', x, y)
-            elif level[y][x] == ' ':
-                tile('sky', x, y)
-            elif level[y][x] == '@':  # Спавн игрока
-                tile('sky', x, y)
+            if level[y][x] == '@':  # Спавн игрока
+                tile(s[level[y][x + 1]], x, y)
                 user_coords.append([x, y])
             elif level[y][x] == '#':
                 tile('roof', x, y)
             elif level[y][x] == 'B':
                 tile('box', x, y)
             elif level[y][x] == 'C':  # Камера
-                tile('fon', x, y)
+                tile(s[level[y][x + 1]], x, y)
                 camera_coords.append([x, y])
             elif level[y][x] == 'R':  # Лестница Металическая(300р.)
                 tile('floor', x, y)
                 rove_coords.append([x, y])
             elif level[y][x] == 'D':  # Дверь в стене
                 tile('WallDoor', x, y)
-            elif level[y][x] == 'p':
-                tile('pedestal', x, y)
-            elif level[y][x] == 't':
-                tile('table', x, y)
-            elif level[y][x] == 'b':
-                tile('box_book', x, y)
-            elif level[y][x] == 'P':
-                tile('pk', x, y)
+            elif level[y][x] == 'G':
+                tile(s[level[y][x + 1]], x, y)
+                journal_coords.append([x, y])
+            elif level[y][x] == '|':
+                tile('wall', x, y)
+                wall_coords.append([x, y])
+            else:
+                if level[y][x] != '\n':
+                    tile(s[level[y][x]], x, y)
 
 
 def info_subject():
-    return camera_coords, rove_coords, user_coords
+    return camera_coords, rove_coords, wall_coords, journal_coords, user_coords
+
+
+def door_info():
+    return door_coords
 
 
 def read_progress():  # Чтение файла c прогресом
-    print(name_info)
     s = {4: 'fiz', 5: 'xim', 1: 'tex', 2: 'bio', 3: 'lit'}
     znach = {'*': True, ' ': False}
     with open(f"data/progress/{name_info}", encoding="utf-8") as f:
@@ -162,10 +165,14 @@ def read_progress():  # Чтение файла c прогресом
     return read_data
 
 
-def recording_progress(name):  # Запись прогреса в файл прогерсса
-    with open(f"progress/{name}", "w") as f:
-        print('***', file=f)
-    # Пока не доделана до идеала
+def recording_progress(data):  # Запись прогреса в файл прогерсса
+    with open(f"data/progress/{name_info}", 'r+') as f:
+        read_data = f.read().split('\n')
+        f.truncate(0)
+    with open(f"data/progress/{name_info}", "w") as f:
+        for i in read_data[:-1]:
+            print(i, file=f)
+        print(data, file=f)
 
 
 def file_progress(name):
