@@ -147,7 +147,7 @@ def generate_level(level, tile):  # Генерациы уровня
             elif level[y][x] == 'G':
                 tile('fon_dock', x, y)
                 journal_coords.append([x, y])
-            elif level[y][x] == 'W':
+            elif level[y][x] == '|':
                 tile('wall', x, y)
                 wall_coords.append([x, y])
 
