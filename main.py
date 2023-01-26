@@ -230,10 +230,12 @@ def lvl():
                 if event.key == pygame.K_ESCAPE:
                     signal_input('exit')
             level_sprites.update(event)
-            if signal_output() == 'exit':
-                screen.fill(pygame.Color(0, 0, 0))
-                signal_input(None)
-                return level_choice()
+        if signal_output() == 'exit':
+            screen.fill(pygame.Color(0, 0, 0))
+            signal_input(None)
+            npc_sprites.empty()
+            level_sprites.empty()
+            return level_choice()
         if pygame.sprite.spritecollide(pit, npc_sprites, False):
             if not mig:
                 mig = Mig()
