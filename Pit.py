@@ -27,6 +27,7 @@ class Pit(pygame.sprite.Sprite):
         self.start_pos = 0
 
     def update(self, *args):
+        # print([self.rect.x, self.rect.y])
         if args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_DOWN:
             for coord in info_subject()[1]:
                 if (self.rect.left + 30 * (WIDTH / 1700) >= coord[0] * 34 * (WIDTH / 1700)
@@ -50,14 +51,24 @@ class Pit(pygame.sprite.Sprite):
                     self.lmove = False
                     self.dmove = False
         elif args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_RIGHT and not self.dmove and not self.umove:
-            self.rmove = True
-            self.lmove = False
-            self.rect = self.rect.move(10, 0)
+            print(info_subject()[2])
+            if [self.rect.x // 10 * 10 + 5 + 40 * (WIDTH / 1750) // 10 * 10,
+               (self.rect.y - 5 * (HEIGHT / 850)) // 10 * 10] not in info_subject()[2]:
+                self.rmove = True
+                self.lmove = False
+                self.rect = self.rect.move(10, 0)
+            else:
+                self.rmove = False
+                self.lmove = False
         elif args and args[0].type == pygame.KEYDOWN and args[0].key == pygame.K_LEFT and not self.dmove and not self.umove:
-            self.rmove = False
-            self.lmove = True
-            self.rect = self.rect.move(-10, 0)
-
+            if [self.rect.x // 10 * 10 + 5 - 20 * (WIDTH / 1750) // 10 * 10,
+               (self.rect.y - 5 * (HEIGHT / 850)) // 10 * 10] not in info_subject()[2]:
+                self.rmove = False
+                self.lmove = True
+                self.rect = self.rect.move(-10, 0)
+            else:
+                self.rmove = False
+                self.lmove = False
         else:
             self.rmove = False
             self.lmove = False
