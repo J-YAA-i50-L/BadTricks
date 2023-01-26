@@ -35,6 +35,7 @@ npc_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
 ruchka_sound = pygame.mixer.Sound('Music/ruchka.wav')
 win_sound = pygame.mixer.Sound('Music/win.wav')
+noob_music = pygame.mixer.Sound('Music/Busted.wav')
 menu_music = False
 lvl1_music = False
 
@@ -97,10 +98,11 @@ def load_level(filename):
 
 
 def generate_level(level, tile):  # Генерациы уровня
+    """Расшифровка файла .txt с уровнем, для отрисовки обьектов на экранн"""
     s = {'.': 'fon', ' ': 'sky', '_': 'floor', '|': 'wall',
          '0': 'window', '#': 'roof', 'B': 'box', 'y': 'fon_dock',
          'P': 'pk', 'b': 'box_book', 't': 'table', 'p': 'pedestal',
-         ',': 'fon_bio'}
+         ',': 'fon_bio', "'": 'fon2', ":": 'plitca_g', ';': 'plitca_b'}
     global camera_coords, rove_coords, user_coords, journal_coords, wall_coords, door_coords
     camera_coords = []
     rove_coords = []
@@ -130,12 +132,19 @@ def generate_level(level, tile):  # Генерациы уровня
             elif level[y][x] == '|':
                 tile('wall', x, y)
                 wall_coords.append([x, y])
+            elif level[y][x] == '/':
+                tile('sky', x, y)
+                wall_coords.append([x, y])
             else:
                 if level[y][x] != '\n':
                     tile(s[level[y][x]], x, y)
+    print(list(map(lambda x: [int(x[0] * (WIDTH / 1750) * 34), int(x[1] * (HEIGHT / 850) * 34)], wall_coords)))
+    wall_coords = list(map(lambda x: [int(x[0] * (WIDTH / 1750) * 34 // 10 * 10),
+                                      int((x[1] * (HEIGHT / 850)) * 34 // 10 * 10)], wall_coords))
 
 
 def info_subject():
+    print('\t', wall_coords)
     return camera_coords, rove_coords, wall_coords, journal_coords, user_coords
 
 
@@ -178,3 +187,26 @@ def recording_progress(data):  # Запись прогреса в файл пр�
 def file_progress(name):
     global name_info
     name_info = name
+
+
+class Mig(pygame.sprite.Sprite):
+    image_y = load_image("New Piskel (6).png", cat='Camera')
+    image_r = load_image("New Piskel (11).png", cat='Camera')
+
+    def __init__(self):
+        super().__init__(npc_sprites)
+        self.image = pygame.transform.scale(Mig.image_y, (Mig.image_y.get_width() * 2,
+                                                            Mig.image_y.get_height() * 2))
+        self.rect = self.image.get_rect()
+        self.rect.x = WIDTH / 2
+        self.tick = 1
+
+    def update(self, *args):
+        global signal_start
+        self.tick += 1
+        if self.tick == 75:
+            self.image = pygame.transform.scale(Mig.image_r, (Mig.image_r.get_width() * 2,
+                                                            Mig.image_r.get_height() * 2))
+        if self.tick == 150:
+            noob_music.play()
+            signal_start = 'exit'

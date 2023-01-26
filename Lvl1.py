@@ -15,7 +15,9 @@ tile_images = {'floor': load_image('Floor0.png', cat='Tex'),
                'box_book': load_image('box_book.png', cat='Tex'),
                'pk': load_image('pk.png', cat='Tex'),
                'fon_dock': load_image('Fon1.png', cat='Tex'),
-               'fon_bio': load_image('Fon2.png', cat='Tex')}
+               'fon_bio': load_image('Fon2.png', cat='Tex'),
+               'fon2': load_image('Fon3.png', cat='Tex'),
+               'plitca_b': load_image('plitka_b.png', cat='Tex')}
 
 
 class Tile1(pygame.sprite.Sprite):  # отрисовка уровня
