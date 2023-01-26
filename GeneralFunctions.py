@@ -98,10 +98,11 @@ def load_level(filename):
 
 
 def generate_level(level, tile):  # Генерациы уровня
+    """Расшифровка файла .txt с уровнем, для отрисовки обьектов на экранн"""
     s = {'.': 'fon', ' ': 'sky', '_': 'floor', '|': 'wall',
          '0': 'window', '#': 'roof', 'B': 'box', 'y': 'fon_dock',
          'P': 'pk', 'b': 'box_book', 't': 'table', 'p': 'pedestal',
-         ',': 'fon_bio'}
+         ',': 'fon_bio', "'": 'fon2', ":": 'plitca_g', ';': 'plitca_b'}
     global camera_coords, rove_coords, user_coords, journal_coords, wall_coords, door_coords
     camera_coords = []
     rove_coords = []
@@ -130,6 +131,9 @@ def generate_level(level, tile):  # Генерациы уровня
                 journal_coords.append([x, y])
             elif level[y][x] == '|':
                 tile('wall', x, y)
+                wall_coords.append([x, y])
+            elif level[y][x] == '/':
+                tile('sky', x, y)
                 wall_coords.append([x, y])
             else:
                 if level[y][x] != '\n':
