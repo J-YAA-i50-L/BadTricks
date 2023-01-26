@@ -43,7 +43,7 @@ class Camera(pygame.sprite.Sprite):
                     self.lmove = False
                     Nothing(int(int(self.x) * (WIDTH / 1700) * 34) + 140 * (WIDTH / 1700),
                             int(int(self.y) * (HEIGHT / 850) * 34),
-                            9 * (WIDTH / 1700) * 34, 34 * 6 * (HEIGHT / 850))
+                            9 * (WIDTH / 1700) * 34, 34 * 6 * (HEIGHT / 850), self.group)
                 else:
                     self.rmove = False
                     self.lmove = True
