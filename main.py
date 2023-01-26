@@ -108,7 +108,7 @@ def registration():  # Регистрация
                 terminate()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    terminate()
+                    signal_input('exit')
                 else:
                     reg_sprites.update(event)
             if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
@@ -187,27 +187,27 @@ def level_choice():  # Выбор уровня
                 terminate()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    terminate()
+                    signal_input('exit')
             if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
                 level_choice_sprites.update(event)
                 name_level = signal_output()
-                if signal_output() == 'exit':
-                    screen.fill(pygame.Color(0, 0, 0))
-                    signal_input(None)
-                    return start_screen()  # Завершаем работу выбора уровня и открываем стартовое окно
-                elif name_level != None and 'lvl' == name_level[:3]:
+                if name_level != None and 'lvl' == name_level[:3]:
                     screen.fill(pygame.Color(0, 0, 0))
                     signal_input(None)
                     return lvl()  # Завершаем работу выбора уровня и открываем первый уровень
+        if signal_output() == 'exit':
+            screen.fill(pygame.Color(0, 0, 0))
+            signal_input(None)
+            return start_screen()  # Завершаем работу выбора уровня и открываем стартовое окно
         level_choice_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
 
 def lvl():
-    global npc_sprites, level_sprites
     generate_level(load_level(f'{name_level}.txt'), Tile1)
     Timer(level_sprites)
+    ExitСross(level_sprites, 'back')
     info = info_subject()
     journal = Journal(level_sprites, info[-2][0][0], info[-2][0][1])
     timer = Timer(level_sprites)
@@ -228,8 +228,12 @@ def lvl():
                 terminate()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    terminate()
+                    signal_input('exit')
             level_sprites.update(event)
+            if signal_output() == 'exit':
+                screen.fill(pygame.Color(0, 0, 0))
+                signal_input(None)
+                return level_choice()
         if pygame.sprite.spritecollide(pit, npc_sprites, False):
             if not mig:
                 mig = Mig()
