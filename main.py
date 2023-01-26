@@ -246,8 +246,12 @@ def lvl():
             all_time = timer.get_time()
             # тут нужно сделать запись сохранения в файл в зависимости от all_time
             screen.fill(pygame.Color(0, 0, 0))
-            if all_time <= 10:
+            if all_time <= 80:
                 recording_progress('***')
+            elif all_time <= 160:
+                recording_progress('**')
+            else:
+                recording_progress('*')
             return level_choice()
         else:
             pit.animation()
