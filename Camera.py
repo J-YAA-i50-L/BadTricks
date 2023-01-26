@@ -27,6 +27,7 @@ class Camera(pygame.sprite.Sprite):
         self.lmove = False
         self.move = True
         self.nothing = None
+        self.group = group
 
     def update(self, *args):
         self.tick += 1
@@ -48,7 +49,7 @@ class Camera(pygame.sprite.Sprite):
                     self.lmove = True
                     Nothing(int(int(self.x) * (WIDTH / 1700) * 34) - 7 * (WIDTH / 1700) * 34,
                             int(int(self.y) * (HEIGHT / 850) * 34),
-                            8 * (WIDTH / 1700) * 34, 34 * 6 * (HEIGHT / 850))
+                            8 * (WIDTH / 1700) * 34, 34 * 6 * (HEIGHT / 850), self.group)
                 self.move = False
             else:
                 self.move = True
@@ -66,8 +67,8 @@ class Camera(pygame.sprite.Sprite):
 class Nothing(pygame.sprite.Sprite):
     image = load_image("nothing.png", cat='data')
 
-    def __init__(self, x, y, wigth, height):
-        super().__init__(npc_sprites)
+    def __init__(self, x, y, wigth, height, group):
+        super().__init__(group)
         self.image = pygame.transform.scale(Nothing.image, (Nothing.image.get_width() / 1700 * wigth,
                                                      Nothing.image.get_height() / 850 * height))
         self.rect = self.image.get_rect()
