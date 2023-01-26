@@ -234,8 +234,13 @@ def lvl():
                 screen.fill(pygame.Color(0, 0, 0))
                 signal_input(None)
                 return level_choice()
-            if pygame.sprite.spritecollide(pit, npc_sprites, False) and not mig:
-                print('collide')
+        if pygame.sprite.spritecollide(pit, npc_sprites, False):
+            if not mig:
+                mig = Mig()
+        else:
+            if mig:
+                mig.kill()
+                mig = None
         if pygame.sprite.collide_rect(pit, journal):
             pit.end()
             level_sprites.draw(screen)

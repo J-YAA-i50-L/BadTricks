@@ -185,10 +185,21 @@ def file_progress(name):
 
 
 class Mig(pygame.sprite.Sprite):
-    image = load_image("yimg.png", cat='data')
+    image_y = load_image("New Piskel (6).png", cat='Camera')
+    image_r = load_image("New Piskel (11).png", cat='Camera')
 
     def __init__(self):
         super().__init__(npc_sprites)
-        self.image = pygame.transform.scale(Mig.image, (Mig.image.get_width() / 1700 * 100,
-                                                            Mig.image.get_height() / 850 * 100))
+        self.image = pygame.transform.scale(Mig.image_y, (Mig.image_y.get_width() * 2,
+                                                            Mig.image_y.get_height() * 2))
         self.rect = self.image.get_rect()
+        self.rect.x = WIDTH / 2
+        self.tick = 1
+
+    def update(self, *args):
+        self.tick += 1
+        if self.tick == 100:
+            self.image = pygame.transform.scale(Mig.image_r, (Mig.image_r.get_width() * 2,
+                                                            Mig.image_r.get_height() * 2))
+        if self.tick == 50:
+            pass
