@@ -205,10 +205,9 @@ def level_choice():  # Выбор уровня
 
 
 def lvl():
-    global npc_sprites
+    global npc_sprites, level_sprites
     generate_level(load_level(f'{name_level}.txt'), Tile1)
     Timer(level_sprites)
-    ExitСross(level_sprites, 'back')
     info = info_subject()
     journal = Journal(level_sprites, info[-2][0][0], info[-2][0][1])
     timer = Timer(level_sprites)
@@ -231,11 +230,6 @@ def lvl():
                 if event.key == pygame.K_ESCAPE:
                     terminate()
             level_sprites.update(event)
-            if signal_output() == 'exit':
-                screen.fill(pygame.Color(0, 0, 0))
-                signal_input(None)
-                npc_sprites = pygame.sprite.Group()
-                return level_choice()
         if pygame.sprite.spritecollide(pit, npc_sprites, False):
             if not mig:
                 mig = Mig()
@@ -252,7 +246,6 @@ def lvl():
             win_sound.play()
             all_time = timer.get_time()
             signal_input(None)
-            # тут нужно сделать запись сохранения в файл в зависимости от all_time
             screen.fill(pygame.Color(0, 0, 0))
             if all_time <= 80:
                 recording_progress('***')
@@ -260,7 +253,8 @@ def lvl():
                 recording_progress('**')
             else:
                 recording_progress('*')
-            npc_sprites = pygame.sprite.Group()
+            npc_sprites.empty()
+            level_sprites.empty()
             return level_choice()
         else:
             pit.animation()
