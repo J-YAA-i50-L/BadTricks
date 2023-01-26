@@ -46,7 +46,7 @@ class Camera(pygame.sprite.Sprite):
                 else:
                     self.rmove = False
                     self.lmove = True
-                    Nothing(int(int(self.x) * (WIDTH / 1700) * 34) - 8 * (WIDTH / 1700) * 34,
+                    Nothing(int(int(self.x) * (WIDTH / 1700) * 34) - 7 * (WIDTH / 1700) * 34,
                             int(int(self.y) * (HEIGHT / 850) * 34),
                             8 * (WIDTH / 1700) * 34, 34 * 6 * (HEIGHT / 850))
                 self.move = False

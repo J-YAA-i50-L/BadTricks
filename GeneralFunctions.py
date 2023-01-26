@@ -35,6 +35,7 @@ npc_sprites = pygame.sprite.Group()
 button_sound = pygame.mixer.Sound('Music/button.wav')
 ruchka_sound = pygame.mixer.Sound('Music/ruchka.wav')
 win_sound = pygame.mixer.Sound('Music/win.wav')
+noob_music = pygame.mixer.Sound('Music/Busted.wav')
 menu_music = False
 lvl1_music = False
 
@@ -197,9 +198,11 @@ class Mig(pygame.sprite.Sprite):
         self.tick = 1
 
     def update(self, *args):
+        global signal_start
         self.tick += 1
-        if self.tick == 100:
+        if self.tick == 75:
             self.image = pygame.transform.scale(Mig.image_r, (Mig.image_r.get_width() * 2,
                                                             Mig.image_r.get_height() * 2))
-        if self.tick == 50:
-            pass
+        if self.tick == 150:
+            noob_music.play()
+            signal_start = 'exit'
