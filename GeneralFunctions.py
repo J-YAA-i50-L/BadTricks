@@ -155,6 +155,8 @@ def door_info():
 def read_progress():  # Чтение файла c прогресом
     s = {4: 'fiz', 5: 'xim', 1: 'tex', 2: 'bio', 3: 'lit'}
     znach = {'*': True, ' ': False}
+    with open(f"data/progress/info.txt", 'r+') as f:
+        f.truncate(0)
     with open(f"data/progress/{name_info}", encoding="utf-8") as f:
         read_data = f.read().split('\n')
         if len(read_data) < 5:
