@@ -1,5 +1,3 @@
-import time
-
 from GeneralFunctions import *
 
 
@@ -126,4 +124,6 @@ class Pit(pygame.sprite.Sprite):
     def end(self):
         self.image = self.frames[11]
         ruchka_sound.play()
+
+
 

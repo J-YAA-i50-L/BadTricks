@@ -182,3 +182,13 @@ def recording_progress(data):  # Запись прогреса в файл пр�
 def file_progress(name):
     global name_info
     name_info = name
+
+
+class Mig(pygame.sprite.Sprite):
+    image = load_image("yimg.png", cat='data')
+
+    def __init__(self):
+        super().__init__(npc_sprites)
+        self.image = pygame.transform.scale(Mig.image, (Mig.image.get_width() / 1700 * 100,
+                                                            Mig.image.get_height() / 850 * 100))
+        self.rect = self.image.get_rect()

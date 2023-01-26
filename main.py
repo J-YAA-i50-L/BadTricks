@@ -205,7 +205,6 @@ def level_choice():  # Выбор уровня
 
 
 def lvl():
-    print(name_level)
     generate_level(load_level(f'{name_level}.txt'), Tile1)
     Timer(level_sprites)
     ExitСross(level_sprites, 'back')
@@ -220,6 +219,7 @@ def lvl():
         Stear(level_sprites, j[0], j[1])
     Number(level_sprites, '0', 0)
     pit = Pit(level_sprites, info[-1][0][0], info[-1][0][1])
+    mig = None
     while True:
         screen.fill((0, 0, 0))
         timer.update_time()
@@ -234,6 +234,8 @@ def lvl():
                 screen.fill(pygame.Color(0, 0, 0))
                 signal_input(None)
                 return level_choice()
+            if pygame.sprite.spritecollide(pit, npc_sprites, False) and not mig:
+                print('collide')
         if pygame.sprite.collide_rect(pit, journal):
             pit.end()
             level_sprites.draw(screen)
