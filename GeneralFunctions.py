@@ -133,14 +133,13 @@ def generate_level(level, tile):  # Генерациы уровня
             else:
                 if level[y][x] != '\n':
                     tile(s[level[y][x]], x, y)
-    print(list(map(lambda x: [int(x[0] * (WIDTH / 1750) * 34),
-                                      int(x[1] * (HEIGHT / 850) * 34)], wall_coords)))
-    wall_coords = list(map(lambda x: [int(x[0] * (WIDTH / 1750) * 34 // 10 * 10 + 5),
+    print(list(map(lambda x: [int(x[0] * (WIDTH / 1750) * 34), int(x[1] * (HEIGHT / 850) * 34)], wall_coords)))
+    wall_coords = list(map(lambda x: [int(x[0] * (WIDTH / 1750) * 34 // 10 * 10),
                                       int((x[1] * (HEIGHT / 850)) * 34 // 10 * 10)], wall_coords))
 
 
 def info_subject():
-    # print('\t', wall_coords)
+    print('\t', wall_coords)
     return camera_coords, rove_coords, wall_coords, journal_coords, user_coords
 
 
