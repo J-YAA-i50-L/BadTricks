@@ -90,7 +90,7 @@ class Pit(pygame.sprite.Sprite):
             self.rmove = False
             self.lmove = False
             self.umove = False
-            if self.rect.bottom - self.start_pos <= 238 * (WIDTH / 1750):
+            if self.rect.bottom - self.start_pos <= 204 * (HEIGHT / 850):
                 self.move_counter += 1
                 if self.move_counter // 20 % 2 == 1:
                     self.image = self.frames[9]
@@ -104,7 +104,7 @@ class Pit(pygame.sprite.Sprite):
             self.rmove = False
             self.lmove = False
             self.dmove = False
-            if self.start_pos - self.rect.bottom <= 238 * (WIDTH / 1750):
+            if self.start_pos - self.rect.bottom <= 238 * (HEIGHT / 850):
                 self.move_counter += 1
                 if self.move_counter // 20 % 2 == 1:
                     self.image = self.frames[9]

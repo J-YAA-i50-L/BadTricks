@@ -21,6 +21,8 @@ name_level = ''
 
 
 def start_screen():
+    with open(f"data/progress/info.txt", 'r+') as f:
+        f.truncate(0)
     fon = pygame.transform.scale(load_image('meny.jpg', cat='Sprite_meny_play'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     Boor(meny_sprites)
