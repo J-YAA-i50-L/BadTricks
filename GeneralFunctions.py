@@ -94,6 +94,7 @@ def load_level(filename):
     # Читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
         level_map = [line for line in mapFile]
+    print(level_map)
     return level_map
 
 
@@ -138,7 +139,6 @@ def generate_level(level, tile):  # Генерациы уровня
             else:
                 if level[y][x] != '\n':
                     tile(s[level[y][x]], x, y)
-    print(list(map(lambda x: [int(x[0] * (WIDTH / 1750) * 34), int(x[1] * (HEIGHT / 850) * 34)], wall_coords)))
     wall_coords = list(map(lambda x: [int(x[0] * (WIDTH / 1750) * 34 // 10 * 10),
                                       int((x[1] * (HEIGHT / 850)) * 34 // 10 * 10)], wall_coords))
 

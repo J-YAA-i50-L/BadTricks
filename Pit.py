@@ -55,7 +55,7 @@ class Pit(pygame.sprite.Sprite):
                 print([(self.rect.x // 10 * 10) + (40 * (WIDTH / 1750) // 10 * 10), (self.rect.y // 10 * 10 * (HEIGHT / 850)) // 10 * 10])
                 self.rmove = True
                 self.lmove = False
-                self.rect = self.rect.move(15, 0)
+                self.rect = self.rect.move(5, 0)
             else:
                 self.rmove = False
                 self.lmove = False
@@ -65,7 +65,7 @@ class Pit(pygame.sprite.Sprite):
                 print([self.rect.x // 10 * 10 - (30 * (WIDTH / 1750) // 10 * 10), (self.rect.y // 10 * 10 - (5 * (HEIGHT / 850)) // 10 * 10)])
                 self.rmove = False
                 self.lmove = True
-                self.rect = self.rect.move(-15, 0)
+                self.rect = self.rect.move(-5, 0)
             else:
                 self.rmove = False
                 self.lmove = False
